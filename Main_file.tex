@@ -1,0 +1,239 @@
+% =========================================================
+% UNIVERSITY OF LAGOS FINAL YEAR PROJECT TEMPLATE
+% Author: Department of Systems Engineering
+% ---------------------------------------------------------
+% Includes AI, Robotics, Industrial Engineering, etc.
+% APA citation style; formal UNILAG layout
+% =========================================================
+
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ---------------------------------------------------------
+% PACKAGES
+% ---------------------------------------------------------
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx, float}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{siunitx}
+% \usepackage{hyperref}
+% \usepackage[
+%   colorlinks=true,
+%   linkcolor=blue,
+%   citecolor=blue,
+%   urlcolor=blue
+% ]{hyperref}
+\usepackage[hidelinks]{hyperref}
+\usepackage{textcase} % fixes uppercase issue
+\usepackage[style=apa,backend=biber]{biblatex}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xurl}
+\usepackage{xcolor}
+
+
+\addbibresource{references.bib}
+\graphicspath{{figures/}}
+
+% ---------------------------------------------------------
+% FONTS AND SPACING
+% ---------------------------------------------------------
+\usepackage{newtxtext,newtxmath} % Times New Roman style font
+\onehalfspacing
+
+% line spacing
+% \renewcommand{\baselinestretch}{1.5}
+
+% Paragraph indent and skip
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\setlength{\tabcolsep}{6pt} % horizontal padding inside cells
+
+% Table of contents depth to include subsubsections
+\setcounter{tocdepth}{3}
+
+% ---------------------------------------------------------
+% HEADER/FOOTER
+% ---------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+% ---------------------------------------------------------
+% CHAPTER STYLE
+% ---------------------------------------------------------
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering}
+  {\chaptertitlename\ \thechapter}{20pt}{\LARGE\MakeTextUppercase}
+
+% ---------------------------------------------------------
+% FRONT MATTER NUMBERING (Roman)
+% ---------------------------------------------------------
+\newcommand{\frontmatterformat}{\pagenumbering{roman}}
+\newcommand{\mainmatterformat}{\cleardoublepage\pagenumbering{arabic}}
+
+% ---------------------------------------------------------
+% THEOREM / LEMMA / PROOF
+% ---------------------------------------------------------
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
+
+% ---------------------------------------------------------
+% DOCUMENT START
+% ---------------------------------------------------------
+\begin{document}
+\frontmatterformat
+
+% ---------------------------------------------------------
+% TITLE PAGE
+% ---------------------------------------------------------
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=3cm]{unilag_logo.png}\\[1cm]
+        {\Large \textbf{UNIVERSITY OF LAGOS}}\\[1cm]
+        {\large \textbf{FACULTY OF ENGINEERING}}\\[0.5cm]
+        {\large \textbf{DEPARTMENT OF SYSTEMS ENGINEERING}}\\[2cm]
+        {\Large \textbf{DESIGN AND DEVELOPMENT OF AN AUTONOMOUS ROBOT FOR MEDICAL SUPPLY DELIVERY IN DYNAMIC HOSPITAL ENVIRONMENTS USING ROS}}\\[1cm]
+        {\large \textbf{BY}}\\[0.5cm]
+        {\large \textbf{MICHAEL, PRECIOUS EYIZOMORIHI - 180407022}}\\[0.5cm]
+        % {\large Matriculation No: 180407022}\\[1.5cm]
+        {\large \textbf{IBITOYE, OLAJIDE - 180407051}}\\[0.5cm]
+        % {\large Matriculation No: 180407051}\\[1.5cm]
+        {\large A FINAL YEAR PROJECT SUBMITTED TO THE DEPARTMENT OF SYSTEMS ENGINEERING,\\
+        UNIVERSITY OF LAGOS, IN PARTIAL FULFILMENT OF THE REQUIREMENTS FOR THE AWARD OF\\
+        THE DEGREE OF BACHELOR OF SCIENCE (B.Sc.) IN SYSTEMS ENGINEERING}\\[2cm]
+        {\large \textbf{SUPERVISOR: DR. JOHN OGBEMHE}}\\[0.5cm]
+        {\large \textbf{NOVEMBER, 2025}}\\
+    \end{center}
+\end{titlepage}
+
+% ---------------------------------------------------------
+% DECLARATION OF AUTHORSHIP
+% ---------------------------------------------------------
+\chapter*{DECLARATION OF AUTHORSHIP}
+\addcontentsline{toc}{chapter}{Declaration of Authorship}
+We, \textbf{Precious Michael} and \textbf{Olajide Ibitoye}, declare that this project titled \textit{“Design and Development of an Autonomous Robot for Medical Supply Delivery in Dynamic Hospital Environments Using ROS”} and the work presented in it are our own. We confirm that:
+\begin{enumerate}[label=(\alph*)]
+    \item This work was done wholly or mainly while in candidature for a B.Sc. degree at the University of Lagos.
+    \item Where any part of this work has previously been submitted for a degree or any other qualification, it has been clearly stated.
+    \item Any published work of others has been appropriately cited and referenced.
+\end{enumerate}
+
+\vspace{2cm}
+\noindent
+% \textbf{Student's Name:} \underline{\hspace{6cm}} \hfill \textbf{Signature:} \underline{\hspace{4cm}}\\[1cm]
+\textbf{Student's Name:} \underline{\hspace{0.3cm} Precious Michael \hspace{0.3cm}} \hfill \textbf{Signature:} \underline{\hspace{4cm}}\\[1cm]
+\textbf{Student's Name:} \underline{\hspace{0.3cm} Olajide Ibitoye \hspace{0.3cm}} \hfill \textbf{Signature:} \underline{\hspace{4cm}}\\[1cm]
+\textbf{Supervisor's Name:} \underline{\hspace{0.3cm} Dr. John Ogbemhe \hspace{0.3cm}} \hfill \textbf{Signature:} \underline{\hspace{4cm}}\\[1cm]
+\textbf{Head of Department:} \underline{\hspace{0.3cm} Prof. Ladi Ogunwolu \hspace{0.3cm}} \hfill \textbf{Signature:} \underline{\hspace{4cm}}\\[1cm]
+\textbf{Date:} \underline{\hspace{4cm}}
+
+% ---------------------------------------------------------
+% ABSTRACT
+% ---------------------------------------------------------
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{Abstract}
+\input{chapters/abstract}
+
+% ---------------------------------------------------------
+% ACKNOWLEDGEMENTS
+% ---------------------------------------------------------
+\chapter*{ACKNOWLEDGEMENTS}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+The authors wishes to express profound gratitude to God Almighty, the project supervisor Dr.~John Ogbemhe, and all faculty members of the Department of Systems Engineering, University of Lagos, for their support throughout this research work.
+
+We would like to extend our deepest gratitude to our family for their constant encouragement, financial support, and ideas concerning this project. 
+
+We are thankful to our friends for their insights about this project which enabled us to come up with creative features and problems to solve.
+
+Lastly, We would like to express my heartfelt appreciation to God for His grace throughout this journey.
+
+\clearpage
+
+% ---------------------------------------------------------
+% LISTS
+% ---------------------------------------------------------
+\tableofcontents
+\clearpage
+
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
+
+% ---------------------------------------------------------
+% ACRONYMS AND NOMENCLATURE
+% ---------------------------------------------------------
+\chapter*{ACRONYMS AND ABBREVIATIONS}
+\addcontentsline{toc}{chapter}{Acronyms and Abbreviations}
+\input{chapters/acronyms}
+
+\chapter*{NOMENCLATURE}
+\addcontentsline{toc}{chapter}{Nomenclature}
+\input{chapters/nomenclature}
+
+% ---------------------------------------------------------
+% MAIN MATTER
+% ---------------------------------------------------------
+\mainmatterformat
+
+\chapter{INTRODUCTION}
+\input{chapters/introduction}
+
+% ---------------------------------------------------------
+\chapter{LITERATURE REVIEW}
+\input{chapters/literature_review}
+
+
+% ---------------------------------------------------------
+\chapter{METHODOLOGY}
+\input{chapters/methodology}
+
+% ---------------------------------------------------------
+\chapter{RESULTS AND DISCUSSION}
+\input{chapters/results}
+
+% ---------------------------------------------------------
+\chapter{CONCLUSION AND RECOMMENDATIONS}
+\input{chapters/conclusion}
+
+% ---------------------------------------------------------
+% REFERENCES
+% ---------------------------------------------------------
+\printbibliography[heading=bibintoc,title={REFERENCES}]
+
+% ---------------------------------------------------------
+% APPENDICES
+% ---------------------------------------------------------
+\appendix
+\chapter{APPENDIX}
+% Include extra tables, code listings, or diagrams.
+
+Due to file size constraints, detailed implementation artifacts and extended experimental logs are hosted externally.
+
+\section{Project Source Code and Configurations}
+The complete source code, including ROS2 packages, controller configurations, navigation parameters, and hardware interface implementation, is available at:
+
+\url{https://github.com/Eyiza/msds_ws} \\
+\url{https://github.com/Eyiza/MSDS}
+
+\section{Project Demonstration and Testing Video}
+A full demonstration of the robot's operation across evaluation scenarios, including mapping, autonomous delivery tasks, safety fault injection tests, and payload experiments, is available at:
+
+\url{https://drive.google.com/file/d/1JAO9ann2IoKOm0yXlILwokYlmienMdsV/view?usp=sharing}
+
+\end{document}

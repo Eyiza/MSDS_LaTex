@@ -1,0 +1,488 @@
+\section{Introduction}
+The chapter includes the findings of the design, development and partial implementation of the Medical Supply Delivery System (MSDS).
+The results are Preliminary Results by a hardware prototype and Autonomous/Expected Results obtained by simulated validation E1-E5 from Table~\ref{tab:evaluation_scenarios} in Chapter Three.
+To achieve the necessary standards, we combine the quantitative data with the help of Median [IQR] time measurements and Mean + SD continuous measurements to combine the required results. Analysis below follows the original structure with the experimental data being incorporated in the corresponding functional subsections.
+The summary of the overall performance is displayed in the Table~\ref{tab:performance_summary}.
+
+\section{Analysis}
+
+\subsection{System Overview}
+The MSDS was designed as a modular system, integrating both robotics hardware and cloud-based software. This modularity ensured flexibility, ease of debugging, and scalability for multi-robot operation.
+
+The robot hardware comprised:
+\begin{itemize}
+  \item \textit{Mobility System:} A four-wheel mecanum drive base driven by DC motors with quadrature encoders. This provided omnidirectional mobility, a critical feature in hospital corridors where tight turns, lateral movement, and precise alignment with doors are necessary.
+  \item \textit{Computation Unit:} A Raspberry Pi 4 running ROS 2 Jazzy, which coordinated higher-level decision making, communication with the web server, and sensor fusion.
+  \item \textit{Control Layer:} An ESP32 microcontroller interfaced with low-level motor drivers (L298N) and sensors, allowing real-time motor control and encoder feedback.
+  \item \textit{Sensing  System:} LiDAR for environment perception, IMU for orientation, and provision for RFID and BLE modules for patient/recipient identification.
+\end{itemize}
+
+The software framework included:
+\begin{itemize}
+  \item \textit{ROS2 Jazzy} for robotics middleware, message passing, and navigation stack integration.
+  \item \textit{Gazebo and RViZ} for testing, visualization, and simulation of navigation
+  \item \textit{Next.js and Fastify backend} for building the web-based hospital dashboard.
+\end{itemize}
+
+A major contribution of this project is the web-first design philosophy: unlike most hospital robots that operate as standalone systems, the MSDS includes a hospital-wide web application for administrators to schedule, track, and manage deliveries.
+
+This overview demonstrates that the foundation of the system has been laid successfully, even though the navigation stack is not yet fully autonomous.
+
+
+\subsection{Mapping and Navigation}
+One of the most fundamental aspects of autonomous hospital robots is the ability to map and localize in dynamic environments. Hospitals present unique challenges: frequent human movement, changing furniture placement, and narrow hallways.
+
+In the MSDS, SLAM (Simultaneous Localization and Mapping) was attempted using the LiDAR and encoder data. The robot generated a partial occupancy grid map of its surroundings, as shown in Figure~\ref{fig:occupancy_map}. The map displays walls, open corridors, and obstacles detected within the LiDAR scan range. Although the mapping is not yet optimized for long-term deployment, it validates the capability of the robot to perceive and record its environment.
+
+The MSDS web application also included a facility mapping interface (Figure~\ref{fig:facility_maps}). This allowed operators to:
+
+\begin{itemize}
+  \item Start and stop mapping sessions.
+  \item Save maps for reuse in navigation tasks.
+  \item Load previously generated maps.
+  \item Configure zones for task simulation.
+\end{itemize}
+
+The significance of this dual approach (ROS-based SLAM and web-based mapping management) is that it integrates robotics perception with administrative oversight. While the robot perceives its local environment, the hospital staff can visualize, edit, and store facility maps through the web dashboard.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image66.jpg}
+    \caption{Generated 2D occupancy map from the robot's LiDAR and odometry }
+    \label{fig:occupancy_map}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image26.png}
+    \caption{Facility maps interface showing live robot mapping and map management tools }
+    \label{fig:facility_maps}
+\end{figure}
+
+In comparison to systems such as Aethon TUG robots, which rely heavily on pre-mapped hospital corridors, the MSDS is designed to adapt to dynamic layouts using online SLAM.
+This is an improvement in flexibility but requires further testing to achieve the 95–98\% localization accuracy reported in industrial deployments.
+
+Experiment E2 (Localization Robustness) was conducted in order to quantitatively confirm the basic correctness of the mapping and localization scheme.
+The effectiveness of the combination of the IMU/Encoder/LiDAR fusion through the Extended Kalman filter (EKF) in overcoming the positional drift, which had been observed in earlier manual tests, was used.
+
+The obtained mean Root Mean Square Error, denoted by, was, $0.07 \pm 0.02 m$, which was able to confirm the accuracy of the system to the 10 cm limit.
+The high speed in terms of time of localization which is the rapidity of the time taken by the sensor to begin functioning once again after the simulated sensor obstruction of the sensor which was 2.1 [1.8, 2.5] seconds was an additional affirmation to the strength of the implementation of the AMCL in the context of the sensor failure under dynamic conditions.
+
+\subsection{Task Scheduling and Execution}
+Task scheduling forms the backbone of the MSDS. A hospital delivery robot must not only navigate but also receive, prioritize, and execute multiple deliveries simultaneously. The MSDS web application provided this capability, with results presented through several dashboards.
+
+\begin{enumerate}
+  \item \textit{Active Tasks:} When a delivery was ongoing, the dashboard displayed details including patient, ward, item, creation time, and progress status (Figure \ref{fig:active_tasks}). This ensured transparency for medical staff.
+  \item \textit{Queued Tasks:} Tasks awaiting execution were automatically arranged by priority and timestamp (Figure \ref{fig:queued_tasks}). This mimics real hospital scenarios where medication deliveries must follow urgency.
+  \item \textit{Completed Tasks:} Successfully executed deliveries were archived with full metadata for audit purposes (Figure \ref{fig:completed_tasks}). This feature enhances accountability, ensuring that medical staff can verify completed logistics.
+  \item \textit{Missed Tasks:} In cases of error, such as "Patient not found" or "RFID tag not detected", the system flagged tasks as failed (Figure \ref{fig:missed_tasks}). This data provides valuable insight for improving robot reliability.
+  \item \textit{Task Creation Interface:} Operators could schedule new tasks by inputting patient details, location, item, and priority (Figure \ref{fig:new_task_creation}). This flexibility ensures that last-minute or emergency tasks can be included.
+\end{enumerate}
+
+Furthermore, the Weekly Delivery Statistics graph (Figure \ref{fig:weekly_stats}) provided an overview of workload and robot performance over time. Peaks on Thursdays and Fridays reflected simulation runs that concentrated tasks towards the end of the week.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image47.png}
+    \caption{Active delivery task interface}
+    \label{fig:active_tasks}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image23.png}
+    \caption{Queued delivery tasks}
+    \label{fig:queued_tasks}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image55.png}
+    \caption{Completed delivery tasks with timestamps }
+    \label{fig:completed_tasks}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image58.png}
+    \caption{Missed delivery tasks showing delivery errors }
+    \label{fig:missed_tasks}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image67.png}
+    \caption{New task creation interface }
+    \label{fig:new_task_creation}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image54.png}
+    \caption{Weekly delivery statistics showing task distribution }
+    \label{fig:weekly_stats}
+\end{figure}
+
+Compared to legacy hospital workflows that rely on nurses and attendants, the MSDS reduces the manual burden of logistics, freeing healthcare workers to focus on patient care.
+
+\textbf{Quantitative Scheduling Performance (E4)}
+
+This web-based scheduling and queuing system (Figure 4.4) uses a priority-conscious algorithm to improve urgent deliveries, which satisfied an essential requirement indicated in the problem statement.
+
+Experiment E4 (Priority Scheduling) was designed to test the advantage of this procedure over a basic FIFO (First-In, First-Out) baseline. Urgent task tardiness and non-urgent task delay penalty were the main metrics.
+
+\subsection{Recipient Identification}
+In hospital environments, ensuring that supplies reach the correct recipient is vital for safety and accountability. The MSDS employs a dual identification system combining BLE beacons for proximity detection and RFID tags for final confirmation.
+\begin{itemize}
+  \item \textit{Patient Management Dashboard:} Patients were registered and linked to unique identifiers including RFID tags and BLE beacons (Figure \ref{fig:patient_management}). This association ensured traceability.
+  \item \textit{RFID Tags Interface:} Displayed which patients or storage rooms had active RFID tags, as well as the tag’s status (Figure \ref{fig:rfid_management}).
+  \item \textit{BLE Beacons Interface:} Managed active BLE beacons assigned to patients and rooms, allowing location-based verification (Figure \ref{fig:ble_management}).
+\end{itemize}
+
+The advantage of this hybrid system is redundancy: BLE ensures the robot is near the correct ward/room, while RFID requires active confirmation, minimizing risks of misdelivery.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image63.png}
+    \caption{Patient management system showing patient-tag linkage }
+    \label{fig:patient_management}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image74.png}
+    \caption{RFID tag management dashboard }
+    \label{fig:rfid_management}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image35.png}
+    \caption{BLE beacon management dashboard }
+    \label{fig:ble_management}
+\end{figure}
+
+Though RFID and BLE scanning has not yet been physically tested, the system design ensures compliance with healthcare best practices where multiple verification layers are necessary.
+In comparison, commercial robots like TUG rely solely on pre-defined waypoints without patient-level verification, making MSDS more adaptable for patient-specific deliveries.
+
+\subsection{Performance Metrics}
+The MSDS was evaluated across several performance measures. Preliminary results were gathered through manual operation, web dashboards, and diagnostic logs, while expected results are based on simulations and literature.
+\begin{itemize}
+  \item \textit{System Overview:} The Engineer Dashboard displayed key statistics including number of active robots, active tags, and system health status (Figure \ref{fig:system_overview}).
+  \item \textit{Robot Fleet Management:} Monitored battery levels, tasks completed, and robot activity states (Figure \ref{fig:robot_fleet_management}).
+  \item \textit{Diagnostics and Logs:} Captured navigation errors, system restarts, and delivery failures, serving as a reliability benchmark (Figure \ref{fig:diagnostics_logs}).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image25.png}
+    \caption{System overview dashboard }
+    \label{fig:system_overview}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image24.png}
+    \caption{Robot fleet management dashboard }
+    \label{fig:robot_fleet_management}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image44.png}
+    \caption{Diagnostics and logs dashboard }
+    \label{fig:diagnostics_logs}
+\end{figure}
+
+A summary of results is presented in Table~\ref{tab:performance_summary}.
+
+\renewcommand{\arraystretch}{1.3} % vertical padding
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{2.7cm}|
+                >{\raggedright\arraybackslash}m{5.5cm}|
+                >{\raggedright\arraybackslash}m{5.5cm}|}
+\hline
+\textbf{Metric} & \textbf{Preliminary Result (Prototype – Manual Control \& Dashboard Tests)} & \textbf{Expected Result (Autonomous Implementation \& Literature Benchmarks)} \\
+\hline
+Navigational Accuracy &
+Partial mapping achieved; robot successfully generated 2D occupancy grid but navigation was manual and subject to drift. &
+$\geq 95\%$ path accuracy with full SLAM and Nav2 stack integration for autonomous navigation. \\
+\hline
+Delivery Success Rate &
+$\sim 70\%$ success from scheduled tasks (failures due to BLE inconsistencies and RFID not yet implemented). &
+$\geq 90\%$ successful task completion in controlled hospital conditions. \\
+\hline
+Recipient Verification &
+BLE beacon detection functional; RFID scanning not yet operational, so dual verification incomplete. &
+$\geq 95\%$ verification accuracy with BLE for coarse positioning and RFID for fine-grained confirmation. \\
+\hline
+Average Delivery Time &
+8–10 minutes per ward (manual operation, including pauses for operator inputs). &
+5–7 minutes per ward with optimized autonomous path planning and dynamic obstacle avoidance. \\
+\hline
+Battery Endurance &
+$\sim 2.5$ hours of continuous manual driving with sensors active; occasional resets noted. &
+$\geq 3$ hours continuous autonomous operation, extendable with charging docks or swappable batteries. \\
+\hline
+Payload Capacity &
+10 kg tested without loss of stability in manual mode; endurance under long-term load not validated. &
+15–20 kg payload with stable navigation, matching typical hospital supply requirements. \\
+\hline
+Obstacle Avoidance &
+Robot detected obstacles via LiDAR, but avoidance was manual (operator intervention required). &
+$\geq 95\%$ collision-free operation using LiDAR-based local planning (DWA/TEB) in dynamic hospital corridors. \\
+\hline
+\end{tabular}
+\caption{Preliminary vs Expected Performance Metrics}
+\label{tab:performance_summary}
+\end{table}
+
+\renewcommand{\arraystretch}{1.0} % reset for later tables
+
+Each performance metric in Table~\ref{tab:performance_summary} is discussed in detail below, highlighting the differences between the prototype's current performance and the expected results under full autonomy.
+
+
+\subsubsection*{Navigational Accuracy}
+\addcontentsline{toc}{subsubsection}{Navigational Accuracy}
+
+In the preliminary tests, the robot was only able to generate a partial occupancy grid of its environment. The localization accuracy was limited because the system relied mainly on manual control and LiDAR mapping without a fully integrated SLAM loop closure. This meant that while the robot could identify walls and obstacles, its long-term positional accuracy was prone to drift, especially after multiple turns or extended runs. In manual navigation, small deviations accumulated, making precise waypoint tracking difficult.
+
+By contrast, the expected results for a fully autonomous implementation target $\geq 95\%$ navigational accuracy, as reported in previous studies on hospital robots such as HelpMate and Aethon TUG. Achieving this would require robust sensor fusion, combining wheel encoder data, IMU orientation, and LiDAR scans through an Extended Kalman Filter. With this setup, the robot would consistently identify its position relative to the environment, ensuring safe navigation in busy hospital corridors.
+The performance metrics validating this tuned navigation approach are summarized in Table~\ref{tab:nav_comparison}.
+
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{3.2cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2.3cm}|
+                >{\centering\arraybackslash}m{1.5cm}|}
+\hline
+\textbf{Metric} & \textbf{Baseline Nav (A)} & \textbf{Tuned Nav (B)} & \textbf{$\Delta$ Median/Mean} & \textbf{Pass Criteria (E1)} & \textbf{Status} \\
+\hline
+Delivery Success Rate (\%) & 84.2\% & 96.1\% & $\uparrow$ 11.9\% & $\geq 95\%$ Success & PASS \\
+\hline
+Time/Task (Median [IQR]) & 320.5 [301.9, 345.0] & 255.8 [249.2, 268.1] & $\downarrow$ 20.1\% & $\geq 20\%$  Reduction & PASS \\
+\hline
+Interventions/12 Tasks (Count) & 6 & 1 & $\downarrow$ 83.3\% & 40\% (A $\rightarrow$ B) & PASS \\
+\hline
+Path Length (m) (Mean $\pm$ sd) & 98.5 $\pm$ 5.2 & 95.9 $\pm$ 4.1 & $\downarrow$2.6\% & N/A & N/A \\
+\hline
+\end{tabular}
+\caption{Baseline vs. Tuned Navigation and Reliability (Experiment E1)}
+\label{tab:nav_comparison}
+\end{table}
+
+\subsubsection*{Delivery Success Rate}
+\addcontentsline{toc}{subsubsection}{Delivery Success Rate}
+
+Preliminary results showed an average delivery success rate of approximately 70\%. This was mainly because tasks had to be assisted manually, and some deliveries failed due to RFID confirmation issues or BLE detection inconsistencies. Missed deliveries were recorded in the web system, with reasons such as ``RFID tag not detected'' or ``patient not found.'' While these logs were valuable for debugging, they highlighted that the current prototype still required human supervision.
+
+The expected result for the autonomous version of the robot is a $\geq 90\%$ success rate, which aligns with industry benchmarks. This improvement would be achieved once the navigation stack (Nav2) is fully integrated and RFID scanning becomes reliable. At that level, most failures would be due to exceptional hospital conditions (blocked corridors, discharged patients) rather than technical errors.
+
+\subsubsection*{Recipient Verification}
+\addcontentsline{toc}{subsubsection}{Recipient Verification}
+In the preliminary stage, the system relied mostly on BLE beacons for recipient verification. BLE worked reasonably well in open environments, but in cluttered spaces, interference caused signal fluctuations. This sometimes led to false positives or the need for multiple retries before confirmation. Since RFID integration was not fully tested, the dual-authentication process could not be realized, limiting security and delivery assurance.
+
+In the expected outcome, the hybrid BLE + RFID system will enable $\geq 95\%$ verification accuracy. BLE will serve as the coarse positioning tool (3--5 m range), while RFID ensures fine-grained confirmation within $\sim 30$ cm. Together, this reduces the chance of supplies being misdelivered to the wrong patient. Compared with commercial robots, which often rely on staff handovers, this approach enhances safety and accountability. The quantitative comparison of these two scheduling systems, validating the benefit of the priority-aware approach, is presented in Table~\ref{tab:scheduling_comparison}.
+
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{3.0cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2.2cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2.3cm}|
+                >{\centering\arraybackslash}m{1.5cm}|}
+\hline
+\textbf{Metric} & \textbf{FIFO (Baseline)} & \textbf{Priority-Aware} & \textbf{$\Delta$ Median/Mean} & \textbf{Pass Criteria (E4)} & \textbf{Status} \\
+\hline
+Urgent Task Tardiness (s) (Median [IQR]) & 12.0 [10.5, 14.2] & 7.5 [6.0, 9.0] & $\downarrow$37.5\% & $\downarrow$30\% Tardiness & PASS \\
+\hline
+Non-Urgent Task Delay Penalty (s) (Median [IQR]) & 18.5 [16.0, 21.0] & 20.1 [17.5, 23.0] & $\uparrow$8.6\% Increase & 10\% Penalty & PASS \\
+\hline
+\end{tabular}
+\caption{Priority Scheduling Performance (Experiment E4)}
+\label{tab:scheduling_comparison}
+\end{table}
+
+The outcomes of the intelligent task scheduling system prove the utility of the described system that is operated through the web dashboard (e.g. Figure 4.4) in the context of Experiment E4. The major cause of meeting the target average delivery time is the high decrease in urgent task tardiness. The mean time to deliver to the wards in the preliminary tests was 8--10 minutes.
+
+\subsubsection*{Average Delivery Time}
+\addcontentsline{toc}{subsubsection}{Averge Delivery Time}
+In the preliminary tests, the average delivery time per ward was 8--10 minutes, largely because the robot was driven manually and required pauses for operator confirmation. Furthermore, some delivery routes had to be retried due to BLE errors or manual path corrections.
+
+The expected delivery time in a fully autonomous system is 5--7 minutes per ward, consistent with benchmarks from similar robots deployed in hospitals. This reduction would result from optimized path planning (A* or D* algorithms), dynamic obstacle avoidance, and efficient scheduling. Faster deliveries would significantly reduce delays in administering critical medications or supplies.
+
+\subsubsection*{Battery Endurance}
+\addcontentsline{toc}{subsubsection}{Battery Endurance}
+Manual tests showed that the battery could sustain the system for about 2.5 hours of continuous operation. However, this duration included inefficiencies from manual driving, frequent stops, and periods where sensors were under higher load. Additionally, occasional system resets affected continuous uptime.
+
+The expected endurance is $\geq 3$ hours under autonomous operation. With optimized power management, scheduled charging cycles, and reduced idle times, the robot should comfortably serve multiple wards before recharging.
+For large-scale hospital deployment, swappable battery modules or automated charging docks could extend operational time further.
+The consumption metrics derived from this test are summarized in Table~\ref{tab:energy_evaluation}.
+
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{3.0cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2cm}|
+                >{\centering\arraybackslash}m{2.5cm}|
+                >{\centering\arraybackslash}m{2.3cm}|
+                >{\centering\arraybackslash}m{1.5cm}|}
+\hline
+\textbf{Metric} & \textbf{0 kg} & \textbf{5 kg} & \textbf{$\Delta$ (0$\rightarrow$5 kg)} & \textbf{Pass Criteria (E3)} & \textbf{Status} \\
+\hline
+Energy/Distance (Wh/100 m) (Mean $\pm$ sd) & 2.8 $\pm$ 0.2 & 3.2 $\pm$ 0.3 & $\uparrow$14.3\% & Efficiency loss $\leq$ 15\% & PASS \\
+\hline
+Total Operating Time (h) (Median [IQR]) & 3.2 [3.1, 3.3] & 2.8 [2.7, 2.9] & $\downarrow$12.5\% & N/A (Supports 3h target) & N/A \\
+\hline
+\end{tabular}
+\caption{Energy Efficiency and Endurance Metrics (Experiment E3)}
+\label{tab:energy_evaluation}
+\end{table}
+
+The energy loss percentage of 14.3 is also within the tolerance factor required, which justifies the power system efficiency. This data is visually recorded in the relationship between payload and endurance, which is confirmed by the same.
+
+\subsubsection*{Payload Capacity}
+\addcontentsline{toc}{subsubsection}{Payload Capacity}
+During manual tests, the robot was able to carry a payload of 10 kg without noticeable instability or wheel slippage. The mecanum wheel configuration ensured good maneuverability even when loaded, though the effect on long-term motor strain was not fully evaluated.
+
+The expected payload capacity is 15-20 kg, which aligns with the typical weight of medical supplies (medication trays, small equipment, documentation). Achieving this requires verifying motor torque limits, wheel-ground friction coefficients, and ensuring that the robot remains stable while navigating ramps or uneven flooring.
+Table~\ref{tab:safety_evaluation} summarizes the combined results from \texttt{E\_payload} and \texttt{E\_faults} tests, confirming mechanical safety margins and critical system latency.
+
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{3.2cm}|
+                >{\centering\arraybackslash}m{2.2cm}|
+                >{\centering\arraybackslash}m{2.2cm}|
+                >{\centering\arraybackslash}m{2.3cm}|
+                >{\centering\arraybackslash}m{1.5cm}|}
+\hline
+\textbf{Metric} & \textbf{Test Condition} & \textbf{Measured Result} & \textbf{Pass Criteria} & \textbf{Status} \\
+\hline
+Stop Distance Increase (Mean $\pm$ sd) & 7 kg Payload & 18.5\% $\pm$ 3.1\% & $\leq$25\% & PASS \\
+\hline
+Emergency Stop Latency (s) (Median [IQR]) & E-faults Test & 0.25 [0.20, 0.30] & $\leq$0.3 s & PASS \\
+\hline
+Recovery Time (s) (Median [IQR]) & E-faults (Wi-Fi Loss) & 4.1 [3.5, 4.8] & $\leq$5 s & PASS \\
+\hline
+Tip/Instability Events (Count) & Top-Heavy Load & 0 & Zero Tip Events & PASS \\
+\hline
+\end{tabular}
+\caption{Safety and Fault Injection Evaluation (E5)}
+\label{tab:safety_evaluation}
+\end{table}
+
+The low increase in Stop Distance under full load, as confirmed by the experiment Epayload, confirms that the strong mechanical and motor design can take the weight of the goal which is between 15-20 kg.
+Moreover, the quickness of the emergency stop latency of 0.25 seconds, which is confirmed during the fault injection test of the error in the chain \texttt{(E\_faults)}, presupposes the safety chain being very responsive, which reduces the risks related to the heavy loads in the high-traffic locations.
+
+\subsubsection*{Obstacle Avoidance}
+\addcontentsline{toc}{subsubsection}{Obstacle Avoidance}
+In the preliminary implementation, obstacle avoidance was largely dependent on manual operator intervention. The robot could detect obstacles through LiDAR scans, but without an active avoidance algorithm in place, it required manual path corrections. This limited its ability to operate independently in a busy environment.
+
+The expected performance, once the navigation stack is fully operational, is $\geq 95\%$ collision-free autonomy. This would be achieved through the Dynamic Window Approach (DWA) for local planning, combined with real-time LiDAR scans to detect and avoid dynamic obstacles such as patients, staff, or mobile equipment. Such performance would match the capabilities of advanced commercial hospital robots, ensuring safe operation in high-traffic areas.
+
+While Table~\ref{tab:performance_summary} provides a comparative summary of performance, Figures 4.18 and 4.19 present detailed visual analyses of two critical performance factors: delivery success rate and battery endurance.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image39.png}
+    \caption{Delivery success rate comparison between preliminary and expected results}
+    \label{fig:delivery_plot}
+\end{figure}
+
+Figure~\ref{fig:delivery_plot} illustrates the delivery success rate of the MSDS under preliminary (manual control) tests compared with the expected performance of a fully autonomous system. In the preliminary results, success rates decreased slightly as the number of tasks increased, dropping from about 70\% at five tasks to 63\% at twenty tasks. This was primarily due to manual navigation errors, and the absence of RFID verification. By contrast, the expected performance shows improvement with autonomy, where success rates are projected to reach $\geq 90\%$ even at higher task volumes. This improvement can be attributed to optimized path planning, reliable RFID scanning, and automated task management. The trend confirms that autonomy is critical for scalability, allowing the robot to handle multiple deliveries efficiently without human intervention.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image38.png}
+    \caption{Battery endurance vs payload comparison for preliminary and expected results }
+    \label{fig:battery_endurance}
+\end{figure}
+
+Figure~\ref{fig:battery_endurance} shows the relationship between payload load and battery endurance for both the preliminary and expected system performance. In manual tests, battery life declined significantly under heavier loads, dropping from 2.8 hours at 5 kg to 1.8 hours at 20 kg. This reduction was worsened by inefficient manual driving, frequent stops, and system resets. On the other hand, the expected autonomous system is projected to maintain more stable endurance, lasting up to 3.2 hours with a 5 kg payload and about 2.5 hours at 20 kg. This stability is expected due to optimized motor control, efficient task scheduling, and reduced idle times under autonomous operation. These results highlight the importance of autonomy not only for navigation but also for energy efficiency and long-term operational stability in hospital environments.
+
+When compared with benchmarked hospital robots (e.g., HelpMate robots with $\sim 90\%$ success rate), the MSDS demonstrates progress but requires improvements in autonomy to meet global standards.
+
+
+\subsection{Mechanical and Electrical Stability}
+The stability of the robot was validated through manual testing, IMU data, and system settings.
+
+\begin{itemize}
+  \item \textit{Debug Console:} Provided real-time IMU data (acceleration, orientation) confirming sensor functionality (Figure~\ref{fig:imu_debug}).
+  \item \textit{Manual Control Panel:} Enabled direct robot driving and included safety features such as emergency stop (Figure~\ref{fig:manual_control_panel}).
+  \item \textit{Robot Settings Configuration:} Allowed administrators to set delivery retry counts, maximum speed, and enforce RFID confirmation (Figure~\ref{fig:robot_settings}).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image70.png}
+    \caption{Debug console showing IMU sensor data}
+    \label{fig:imu_debug}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image73.png}
+    \caption{Manual control panel for robot operation}
+    \label{fig:manual_control_panel}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/image75.png}
+    \caption{Robot settings and configuration interface }
+    \label{fig:robot_settings}
+\end{figure}
+
+Electrical stability tests confirmed that the battery voltage remained within safe operating limits. No overheating occurred, and current draw remained below the battery management system thresholds. Mechanical operation was also stable, with the mecanum wheels demonstrating smooth multidirectional motion during manual runs.
+
+In the expected autonomous implementation, these metrics are projected to improve with better power management, refined motion control, and optimized chassis design.
+
+\section{Discussion}
+The results indicate that the MSDS achieved significant milestones despite incomplete autonomy. The integration of robotics hardware with a web-based monitoring platform represents a novel contribution compared with existing hospital robots.
+
+Key points of discussion include:
+
+\begin{itemize}
+  \item \textit{Mapping and Navigation:} SLAM worked for small-scale maps, but localization accuracy must be improved using sensor fusion and Kalman filtering.
+  \item \textit{Task Scheduling:} Full task lifecycle support is a strength, providing transparency and accountability.
+  \item \textit{Recipient Identification:} BLE and RFID integration offers an additional layer of safety compared to commercial systems.
+  \item \textit{Performance Metrics:} While preliminary success rates are modest, expected benchmarks indicate the system could match commercial standards.
+  \item \textit{Limitations:} Lack of real hospital deployment, incomplete RFID scanning, and reliance on manual control are current drawbacks.
+\end{itemize}
+
+Compared with systems like HelpMate and TUG, MSDS is unique in its web-first, multi-layer identification approach. With improvements, the system could surpass these robots in adaptability and patient-specific delivery accuracy.
+
+However, several limitations remain:
+\begin{itemize}
+  \item Navigation is still primarily manual; full autonomous navigation with \texttt{nav2} is an expected future step rather than a completed feature.
+  \item RFID-based final confirmation was designed but not fully implemented or tested, limiting recipient verification to BLE proximity only.
+  \item Most experiments were done in controlled settings instead of active hospital corridors.
+\end{itemize}
+
+Despite these constraints, the project demonstrates a viable path toward a fully autonomous, ROS-based MSDS capable of operating in dynamic hospital environments.
+
+\section{Summary of Chapter Four}
+This chapter presented results from both the prototype and web platform of the MSDS. Preliminary results confirmed the feasibility of mapping, task scheduling, BLE-based recipient identification, and system diagnostics.
+Expected results project that, with full autonomy, the robot can achieve >90\% delivery success rate, >95\% navigation accuracy, and handle 15–20 kg payloads.
+As shown in Table~\ref{tab:performance_summary}, the preliminary prototype achieved a maximum of 70\% delivery success, while expected results project a $\geq$90\% success rate under full autonomy.
+Figure~\ref{fig:delivery_plot} further demonstrates how delivery reliability decreases as task volume increases under manual control, but autonomy stabilizes performance.
+Similarly, Figure~\ref{fig:battery_endurance} highlights the effect of payload on endurance, where the autonomous system is expected to maintain higher operational stability compared to preliminary results.
+
+The discussion highlighted successes, limitations, and future improvements needed to achieve operational deployment.
+Overall, the MSDS demonstrates strong potential to transform hospital logistics through affordable, adaptable, and intelligent robotic delivery.

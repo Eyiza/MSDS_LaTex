@@ -1,0 +1,955 @@
+The development of an autonomous medical supply delivery robot requires a well-structured approach. 
+This chapter captures all the necessary methods employed in designing, developing, and evaluating the proposed system. 
+
+To systematically guide the system from problem identification to final implementation, the Engineering Design Process (EDP) is employed as the core framework. 
+Also, the Robot Operating System (ROS) serves as the primary software model for communication between components.
+
+Selecting the right components and materials is crucial in creating the proposed system and this chapter shows just that. 
+Testing and validation are also highlighted to ensure the intended functional requirements are met.
+
+% Section 1
+\section{Engineering Design Process (EDP)}
+The Engineering Design Process (EDP) is a series of steps that can be followed when developing a product. 
+This process is cyclic and iterative, meaning steps can be repeated for as much as needed, making room for improvements as you go. 
+There are 7 steps which will all be employed in this project:
+\begin{enumerate}
+  \item Problem Identification
+  \item Research and Background Study
+  \item Specify Requirements
+  \item Brainstorm and Concept Generation
+  \item Select Best Design
+  \item Detailed Design and Prototyping
+  \item Testing and Iteration
+\end{enumerate}
+
+% Section 2
+\section{Problem Identification}
+The first step in this design process is defining the problem you're trying to solve. 
+Despite advancements in patient care in hospitals, some challenges remain, which affect patient care and the efficiency of hospital operations. 
+Some of these challenges include:
+\begin{itemize}
+  \item \textit{Understaffing and Increased workload on healthcare workers:} This sometimes results in deviation of attention from patient care to handle logistical tasks.
+  \item \textit{Error-prone delivery:} Human errors like misdelivery of supplies, unreliable timing, or inability to track can occur. There have been cases where supplies didn't reach their destination on time because the personnel in charge of the delivery got pulled into another emergency.
+  \item \textit{24/7 unavailability of support staff which causes delays in accessing necessary supplies.}
+  \item \textit{Risk of infection from contact with infected patients:} Transmission of diseases remains a major issue as shown in cases like COVID-19 and other highly infectious diseases. This shows the need to limit exposure unless required.
+\end{itemize}
+
+% Section 3
+\section{Research and Background Study}
+To develop a useful and innovative solution, extensive research is required. 
+This includes analyzing similar solutions and identifying suitable frameworks for implementation.
+
+There have been several robots built to help with hospital logistics, each with its capabilities and limitations. \\
+HelpMate, for example, was one of the early solutions for transporting materials autonomously in both hospitals and nursing homes. 
+It uses sensor-based motion planning algorithms like vision, ultrasonic, and infrared proximity to sense its environment and navigate through it \parencite{evans_helpmate_1989,holland_service_2021}.
+However, it lacks the means for recipient identification and because it relies on a preloaded map, it lacks flexibility in adapting to changing environments.
+
+Aethon also created the TUG robot to perform similar functions by using data from a scanning laser, infrared, and ultrasonic sensors for its navigation \parencite{holland_service_2021}. 
+It can transmit commands to the elevator through a wireless network, specifying which floor to go to. 
+Like HelpMate, it stores preloaded CAD maps of the hospital building, lacking real-time planning for dynamic environments.
+
+The i-MERC (Intelligent Medical Robot) was developed to address a common challenge - transporting meals at the appropriate time and the right temperature. 
+It maintains food quality in healthcare centers during transit by using a heating system and separate compartments for both hot and cold food to keep them at safe temperatures \parencite{noauthor_i-merc_nodate}. 
+However, it is tailored specifically for meal delivery and does not account for other types of deliveries.
+
+Existing systems have utilized various software platforms for control and navigation such as Robot Operating System (ROS), Simultaneous Localization and Mapping (SLAM), custom embedded code, MATLAB/Simulink, AI-based frameworks, and others.
+
+% Section 4
+\section{Specify Requirements}
+Requirements, constraints, and criteria for success are often put on projects due to size in nature or complexity associated with building the project. 
+By having specific requirements, the project stays within the constraints that will allow it to be successful. 
+These requirements can take various forms including functional, non-functional, and technical requirements.
+
+\subsection{Functional Requirements}
+Functional requirements define what a product or system must do. 
+Based on the problem statement and prior research, the system must:
+\begin{itemize}
+  \item Address the limitations of previous solutions by enabling dynamic mapping without requiring a preloaded map.
+  \item Localize itself within the dynamic map.
+  \item Identify designated recipients and plan their path accordingly.
+  \item Provide an interface for user interaction.
+  \item Schedule tasks efficiently.
+  \item Autonomously navigate hospital environments while avoiding obstacles.
+  \item Enable the tracking and confirmation of deliveries.
+  \item Operate continuously until all assigned tasks are completed.
+\end{itemize}
+
+\subsection{Non-functional Requirements}
+Non-functional requirements define how a system should behave rather than what it does. 
+They specify criteria used to evaluate the system's operation rather than its specific behaviors. '
+These requirements include:
+\begin{itemize}
+  \item The system should operate for at least 3 hours before requiring a recharge.
+  \item The recipient identification process should have a high accuracy rate.
+  \item Supplies should be delivered within a maximum of 10 minutes per ward.
+  \item Operating noise should be minimal.
+  \item Obstacle response time should be under 2 seconds.
+  \item Payload capacity should be at 20 kg.
+  \item The system's speed should be suitable for a typical busy environment to avoid hazards.
+  \item Speed should be suitable for a typical busy environment to avoid hazards.
+  \item The system should be easy to operate by an average person.
+\end{itemize}
+
+\subsection{Technical Requirements}
+Technical requirements define the technical specifications (hardware and software) that must be considered to complete a project successfully. 
+They outline capabilities and performance expectations the final product must achieve. 
+These include:
+\begin{itemize}
+  \item The system should include a computational unit capable of processing sensor data and making real-time decisions.
+  \item The system should enable sensor fusion combining data from multiple sensors which will be useful for effective mapping, localization, navigation, and obstacle detection.
+  \item The system should be modular, allowing component upgrades or replacements without major redesigns.
+  \item The system should provide a means of identifying designated recipients.
+  \item The system should enable delivery confirmation before and after the supply handover.
+  \item The system should log delivery events for tracking and future reference.
+  \item The system should operate for at least 3 hours on a full charge.
+  \item The power system should support all computational, sensor, and motion control needs without performance degradation.
+\end{itemize}
+
+\subsection{Design Constraints and Limitations}
+These are factors that limit the design choices. 
+They could be physical, technical, environmental, or financial.
+
+\begin{enumerate}
+    \item \textit{Physical Constraints}
+    \begin{enumerate}
+        \item Standard doorway and corridor widths in hospitals.
+        \item Floor surface variations (tiles, carpet).
+        \item Storage space availability for docking.
+    \end{enumerate}
+
+    \item \textit{Technical Limitations}
+    \begin{enumerate}
+        \item Battery life vs.~Weight trade-off: Increasing battery capacity adds weight, affecting mobility.
+        \item Load capacity vs.~Robot size balance: Increasing load capacity requires a larger robot.
+        \item Sensor range and accuracy in varying lighting.
+    \end{enumerate}
+
+    \item \textit{Environmental Constraints}
+    \begin{enumerate}
+        \item Variable lighting conditions (dimly lit, bright).
+        \item High-traffic areas during peak hours.
+        \item Wet floors during cleaning may cause slipping.
+        \item Material selection must ensure components are non-toxic, easy to sanitize, and safe for hospital environments.
+    \end{enumerate}
+
+    \item \textit{Financial Constraints}
+    \begin{enumerate}
+        \item Quality vs.~Cost trade-off: High-quality components must be balanced against affordability.
+    \end{enumerate}
+
+\end{enumerate}
+
+\subsection{Criteria for Success}
+These metrics determine how the success of the product will be measured. 
+Based on the requirements of this project, it will be considered successful if:
+\begin{itemize}
+  \item The robot can autonomously navigate dynamic and unknown environments.
+  \item It correctly identifies and verifies 95\% of designated recipients.
+  \item It completes at least 90\% of scheduled deliveries.
+  \item Real-time monitoring and efficient task scheduling are effective.
+\end{itemize}
+
+% Section 5
+\section{Brainstorm and Conceptualize Solutions}
+There are usually multiple solutions to one problem. 
+This process involves generating alternative solutions and ideas for the stated goal. 
+It's always a good idea to explore various alternatives before settling on one solution.
+
+\subsection{Locomotion Systems}
+Since the solution must be mobile, we need to consider the possible locomotion systems.
+Different robot configurations exist, each with its advantages and disadvantages.
+
+Legged robots are biologically inspired locomotion systems, making them suitable for uneven terrain and even stair climbing. 
+Quadruped and Bipedal are examples of this system. 
+In artificial human-made environments, however, their efficiency is worse. 
+They require complex control algorithms, consume a lot of energy, and can be slow.
+
+Aerial Drones (UAV - Unmanned Aerial Vehicle), another type of robot configuration easily bypasses obstacles and can be fast.
+However, they are not suitable for indoor environments due to noise, air disturbance, and safety risks. 
+They also require a lot of computational power, are costly, and involve high complexity.
+
+Wheeled robots offer another viable option, as they are stable and energy efficient. 
+Unlike legged robots, they are not biologically inspired but are suitable for artificial human-made environments like the ones present in hospitals. 
+However, their efficiency worsens on uneven or rough surfaces, and they may struggle with obstacles like stairs.
+Wheeled locomotion systems have multiple possible motion architectures that the system can take - Differential Drive,  Omnidirectional Drive, Ackermann Steering Model, etc.
+
+Differential Drive mostly uses two independent drive wheels with caster wheels (not driven) for support and stability. 
+The motor speed of each wheel is adjusted to rotate or translate, which is quite simple and easy to implement. 
+However, it requires a large turning radius making it not ideal for confined spaces, unless it's really small.
+
+Omnidirectional Drive allows movement in any direction without having to rotate the robot or change orientation.
+There are different wheel configurations that can be employed for Omnidirectional movement, one of which is the use of four driven mecanum wheels.
+Other wheel configurations used for this Drive include Omni wheels drive train, Swerve drive, Kiwi drive, and so on, with Mecanum being the most commonly used. 
+By controlling the speed and direction of rotation of each motor, the robot can perform any movement, making it highly maneuverable. 
+However, it requires advanced control algorithms for wheel coordination and shows challenges in accurately calculating odometry.
+
+Ackermann Steering Drive uses a steering mechanism similar to cars, where the front wheels turn while the rear wheels drive. 
+It allows a vehicle's wheels to turn at different angles while navigating curves, preventing tire sliding. 
+Like the Omnidirectional Drive, it requires advanced control algorithms and has a wide turning radius.
+
+\subsection{Software Frameworks}
+Besides locomotion, the choice of software framework is also crucial, as it handles robot control, perception, communication, and navigation.
+
+Robot Operating System (ROS) is a widely used open-source framework designed specifically for robotics applications. 
+It provides libraries and tools for navigation, mapping, and communication between components. 
+Its ability to support modular development is a plus.
+
+Arduino-based firmware is another viable option. 
+It is a simple and lightweight approach that directly controls hardware components. 
+However, it is low-level and lacks the computational power for autonomous navigation and advanced decision-making.
+
+Custom embedded software involves writing bare metal firmware tailored specifically for the robot's hardware. 
+It provides more control over system performance and has no reliance on external frameworks, reducing dependencies. 
+However, it lacks flexibility and requires significant development effort to implement advanced features like navigation and communication protocols that ROS already provides.
+
+MATLAB/Simulink offers a strong environment for modelling and simulation but is less convenient for real-time deployment on a physical robot in a hospital environment.
+
+AI-based Frameworks such as TensorFlow or PyTorch are powerful for learning-based modules (e.g. perception and decision making) but still require an integration layer for hardware, navigation, and system control.
+
+Each of these frameworks supports different programming languages, ranging from Python to C++.
+
+\subsection{Mapping Techniques}
+To effectively navigate dynamic environments autonomously, the robot requires a mapping and localization system that enables it to understand its environment.
+
+SLAM (Simultaneous Localization and Mapping) is a technique that enables a robot to build a map of an unknown environment while simultaneously localizing itself within that map. 
+This technique is widely used in indoor navigation due to its high accuracy and adaptability. 
+However, it may struggle in featureless or highly dynamic environments and require significant computational power.
+
+GPS-Based Navigation provides absolute position data by triangulating signals from satellites. 
+However, it is not suitable for indoor environments due to its low precision and weak signal in enclosed spaces. 
+Therefore, it is primarily used for outdoor navigation.
+
+Visual-inertial odometry (VIO) is a technique that combines camera (visual) data, with data from an Inertial Measurement Unit (IMU) to estimate position, orientation, and movement. 
+While VIO works well for short-term navigation, it tends to get less accurate over time if not corrected, due to small errors gradually adding up. 
+
+Beacon-based Localization uses fixed beacons or markers placed in the environment. 
+It can provide robust localization but requires extensive setup and maintenance.
+
+Static Pre-mapped Navigation relies on preloaded maps such as CAD drawings. 
+This is simple but not adaptable when the environment changes.
+
+\subsection{Human-Robot Interaction Alternatives}
+Additionally, a human-robot interaction system is required to allow nontechnical users to communicate with the robot. 
+This system should enable staff to assign tasks and monitor progress. 
+Possible interface options include a voice command interface, web application, mobile application, desktop application, and an onboard touchscreen interface.
+\begin{itemize}
+  \item \textit{Onboard Touchscreen Interface} allows users to interact with the robot at close range but requires them to physically approach the robot.
+  \item \textit{Voice Command Interface} is intuitive but may be unreliable in noisy hospital environments and can struggle with accents or overlapping speech.
+  \item \textit{Mobile Application} enables control and monitoring from smartphones but requires installation and may be limited by device compatibility.
+  \item \textit{Desktop Application} is suitable for control from nurse stations but lacks mobility and may not be accessible to all staff.
+  \item \textit{Web Application} is accessible from any device with a browser (PC, tablet, mobile) and does not require installation, making it highly scalable for hospital use.
+\end{itemize}
+
+% Section 6
+\section{Select Best Design}
+This process eliminates the solutions that might not be the most appropriate for the project and remains with the better solutions.
+The solution should be selected that fulfils all the requirements set out in the earlier stages of the process.
+
+\subsection{Selection of Locomotion System}
+Given the evaluation of different locomotion and motion systems, the best option is a wheeled robot with an omnidirectional drive (Mecanum wheels), which has sufficient stability and high manoeuvrability to be applied to hospital environments. 
+Speed, control complexity, and lack of efficiency in operating in artificial environments make legged robots infeasible. 
+Indoor use of aerial drones is not suitable and they are a safety hazard. 
+Ackermann steering and differential drive are not considered because their large turning radius made them unsuitable for confined spaces.
+
+\subsection{Selection of Software Framework}
+After analysing multiple software frameworks, ROS emerged as the most viable and convenient option because it already has prebuilt libraries for navigation and control. 
+The computational power of Arduino-based firmware is not enough for complex navigation; custom embedded software lacks flexibility and requires a lot of development efforts, making both options impractical.
+
+\subsection{Selection of Mapping \& Localization Technique}
+SLAM (Simultaneous Localization and Mapping) was chosen as the mapping technique due to its adaptability and efficiency in indoor environments. 
+GPS-based navigation provides poor navigation in enclosed environments and Visual-Inertial Odometry (VIO) can deteriorate over time, ruling out both alternatives.
+
+\subsection{Selection of Human-Robot Interaction Method}
+Possible human-robot interaction options include a voice command interface, web application, mobile application, desktop application, and an onboard touchscreen interface. 
+Voice commands may be affected by high background noise in busy hospitals. 
+Onboard touchscreen interfaces would require the user to approach the robot physically, which is less convenient than remote solutions. 
+Mobile, web, and desktop applications allow remote access; however, mobile and desktop apps require installation, which may limit accessibility. 
+A web application is the most scalable option, as it supports remote access from multiple devices, including PCs, tablets, and smartphones.
+
+\subsection{Modes of Operation}
+The robot should function in four primary modes, each handling a specific operation:
+\begin{enumerate}
+  \item \textbf{Mapping Mode} is the setup phase. 
+  It enables the robot to explore the environment to map its surroundings and label important locations, using SLAM. 
+  This generated map is uploaded to the web app for labelling and scheduling. Mode switches when the user indicates mapping is complete and switches the mode.
+
+  \item \textbf{Delivery Mode} (Task execution phase) occurs when the robot follows scheduled delivery tasks assigned to it via the web app. 
+  It moves to the designated ward or room, scans for the nearest recipient, approaches them, and confirms recipient identity before and after delivery. 
+  Mode switches when all assigned deliveries are complete.
+
+  \item \textbf{Manual Control Mode} allows the robot to be manually controlled via the web app or a joystick during emergencies. 
+  Mode switches when manually changed on the web app or keypad.
+
+  \item \textbf{Standby Mode} occurs when the robot has no pending task and is idle at its base station, awaiting new tasks. 
+  Mode switches when new tasks are assigned or manually changed.
+  
+\end{enumerate}
+
+\subsection{Component Selection and Justifications}
+With the design finalised, appropriate hardware and software components can be selected to suit this design and its requirements.
+
+\begin{enumerate}
+    \item \textit{Motion}:
+    \begin{enumerate}
+        \item 97mm Mecanum wheels to enable omnidirectional movement. 
+        Compared to smaller wheels, larger wheels support the weight of the robot and allow the robot to navigate over small obstacles like cables, and uneven flooring.
+
+        \item JGB37-520 Hall Encoder DC Motor (12V, 178 RPM) drives the wheels. 
+        The rpm selected provides a balance between speed and torque to ensure smooth movement in a hospital setting. 
+        If the rpm is too high, the robot will move too fast, making it difficult to control. 
+        If it's too low, the robot will be slow, inefficient, and late for deliveries. \\
+        The Hall encoders enable movement tracking, improving odometry-based navigation. 
+        They generate pulses as the wheel rotates which determines the distance traveled and wheel speed, improving localization accuracy.
+
+        \item L298N Motor Driver (2x) controls motor speed and direction. 
+        It supports PWM (Pulse Width Modulation) control, enabling smooth acceleration and deceleration.
+
+    \end{enumerate}
+    
+    \item \textit{Sensors and Perception}:
+    \begin{enumerate}
+        \item LiDAR (Slamtec RP C1) measures distances using a laser, useful for mapping and obstacle detection. 
+        The selected LiDAR offers 360° scanning, precise mapping, and real-time obstacle detection, making it ideal for SLAM-based navigation in hospitals.
+
+
+        \item MPU6050 IMU provides motion stability and helps detect tilt or sudden movements. 
+        This enables the robot to maintain balance.
+
+        \item BLE (nRF51822) are Bluetooth Low Energy (BLE) beacons. 
+        They are low-power and transmit signals using Bluetooth low energy, allowing them to be used for recipient identification.
+
+        \item RC522 RFID (Radio Frequency Identification) also emits short-range signals that can be useful for recipient identification, ensuring the correct recipient receives the supplies.
+
+    \end{enumerate}
+
+    \item \textit{Processing Units}:
+    \begin{enumerate}
+        \item Raspberry Pi 4 (4GB RAM, 32GB SD Card): Considering all the computational requirements, a single-board computer (SBC) would be needed. 
+        Raspberry Pi 4 has enough processing power to run ROS, SLAM, and navigation algorithms efficiently.
+
+        \item ESP32 handles Wi-Fi communication and offloads some sensor processing, reducing the processing load on the Raspberry Pi. 
+        It has built-in BLE, enabling BLE scanning.
+
+        \item Mega 2560 R3 provides additional I/O pins for controlling multiple peripherals like the dc motors.
+
+    \end{enumerate}
+
+    \item \textit{Power Requirements}:
+        \begin{enumerate}
+            \item 3S2P (3 in Series and 2 in Parallel) Li-ion Battery Pack (12V, 7Ah) gives stable 12V power to drive motors efficiently. 
+            L298N motor drivers require 12V. 
+            The series connection increases the voltage capacity - the maximum voltage the power supply can handle. 
+            The parallel connection increases the capacity rating, i.e, runtime, so the robot can last longer before requiring a recharge.
+            
+            \item 3S Battery Management System (BMS) prevents overcharging, overcurrent, and overheating in 3S (3 in series) battery packs. 
+            It ensures the cells charge and discharge evenly to avoid damage.
+            
+            \item USB DC-DC Step-down module allows the voltage of the battery pack to be stepped down from 12V to 5V.
+            It contains a buck converter that does this conversion and ensures safe power distribution to low-voltage components like Mega 2560, ESP32, RFID and others. 
+            It also provides a USB slot that can be used to power the Raspberry Pi.
+            
+            \item DC Power Jack Connectors provides an outlet to charge the battery or use the battery to power the system. 
+            This makes it convenient as we don't need to remove the batteries for charging.
+            
+            \item AC/DC Adapter to charge the batteries. 
+            It converts AC power from a wall outlet into DC 15V/3A.
+            
+            \item Lithium Battery Indicator Board to display the battery's charge level through an LED bar display.
+            
+            \item Buck Converter is used to reduce and stabilize the charging voltage before it reaches the battery. 
+            A 3S Li-ion battery pack (3S2P) requires 12.6V for full charging (since each cell charges up to 4.2V). 
+            The adapter provides 15V, which is too high for direct charging. 
+            If directly connected to the 3S battery, it could overcharge the batteries or trigger BMS protection, stopping the charge. 
+            The voltage and current of the buck converter will be tuned to match the correct charging parameters for the battery pack - 12.6V and a safe current limit like 3A.
+        \end{enumerate}
+
+    \item \textit{User Interaction}:
+        \begin{enumerate}
+            \item Bluetooth speakers enable the robot to communicate through voice alerts. 
+            It can be used for pre-recorded instructions or custom audio alerts (e.g., "Please scan your RFID tag"). 
+            Wireless functionality prevents unnecessary wiring complexities.
+            
+            \item Rocker Position Switch acts as a manual override switch for turning the robot on or off.
+            
+            \item 1x4 Keypad allows the user to manually switch between modes: mapping, delivery, manual control, and standby.
+            
+            \item 0.96" Inch OLED Display Screen Module (I2C, 128×64 Resolution) displays system status, messages, and operating mode in real-time. 
+            It is compact and consumes low power.
+
+        \end{enumerate}
+
+\end{enumerate}
+
+\subsection{Material Selection and Justifications}
+The selection of the chassis material is crucial, as it provides structural support and a mounting point for various components.
+For this, a combination of materials is used: acrylic, wood, and foam board. 
+
+Each base would be made of acrylic and wood, with the wood in the center and acrylic on each side. 
+This is to compensate for the weakness of one material in the other. 
+Acrylic, as a material alone, is easily deformed under external pressure and load. 
+Wood, while structurally strong, wears out quickly under heat or moisture.  
+By combining these materials, we have a cost-effective, rigid structure that can withstand heavy loads and different environmental conditions. 
+As a plus, the acrylic gives it an aesthetic look.
+
+The walls are made of foam board to minimize weight while offering enclosure protection.
+
+Metal, although a great option, was avoided due to its weight and cost, which could affect mobility. 
+Besides being expensive to cut and shape, there is also a great risk of a short circuit happening, if not properly designed, as metal is conductive.
+
+Material selection is critical for ensuring durability, safety, and compatibility with hospital environments.
+
+\subsection{Environmental Impact Assessment}
+The environmental impact of the system is analyzed in terms of material sustainability, energy consumption, and long-term hospital deployment.
+
+The system is powered by a rechargeable Li-ion battery pack, thus reducing the use of disposable power sources. 
+The materials used for the chassis, acrylic, wood, and foam board, were selected for their affordability, durability, and lightweight features, reducing energy demands. 
+Acrylic and foam board can be easily cleaned and maintained to hospital-grade hygiene standards. 
+Modular component replacements are also provided in the design, which means that bad parts can be changed without having to get rid of the entire system, reducing electronic waste.
+
+Supply deliveries are automated, which reduces human workload and thus reduces physical strain and exposure to biohazards. 
+It reduces unnecessary movement and cross-contamination risk. 
+The system is nondisruptive as it operates with minimal noise.
+
+The system has a low environmental footprint due to the use of sustainable materials and efficient power consumption.
+
+% Section 7
+\section{Detailed Design and Prototyping}
+This phase translates all conceptual ideas into a fully structured and functional system through its various aspects. 
+This project includes the mechanical, electrical, and software aspects.
+
+\subsection{Mechanical Design}
+The robot chassis provides structural support and is modeled using the Fusion 360 software. 
+It provides a visual representation of the chassis. Two prototypes were designed and the figures below show the various views of each prototype's CAD model.
+Figure~\ref{fig:prototype1_design} show the views of the first prototype and Figures Figure~\ref{fig:prototype2_design} show the views of the second prototype.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image41.png}
+        \caption{Front view}
+        \label{fig:front_p1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image45.png}
+        \caption{Rear view}
+        \label{fig:rear_p1}
+    \end{subfigure}
+    
+    \caption{Prototype 1}
+    \label{fig:prototype1_design}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image56.png}
+        \caption{Front view}
+        \label{fig:front_p2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image46.png}
+        \caption{Rear view}
+        \label{fig:rear_p2}
+    \end{subfigure}
+    
+    \caption{Prototype 2}
+    \label{fig:prototype2_design}
+\end{figure}
+
+The dimensions chosen consider even weight distribution and sufficient internal space for the components.
+Each base dimension is 300mm by 400mm with a height of 60mm per level.
+The thickness of the acrylic is 3mm, the wood is 8mm, and the foam board for the walls is 10mm.
+The components are evenly spaced, and those needed for user interactions, like the RFID reader, switch, keypad, and OLED display, are placed near the ends of the compartment for easy access.
+Due to the presence of the LiDAR on the middle deck, few components are placed there so as not to obstruct the sensor's view and perception.
+
+\subsection{Electrical Design}
+The electrical design ensures safe and efficient power distribution to all components.
+The 12V battery pack powers the DC motors through the L298N motor drivers.
+The 12V is stepped down through a USB adapter, providing a 5V USB port for the Raspberry Pi and 5V terminal wires for the components that require it, such as ESP32, RFID reader, OLED, and others. LiDAR, IMU, and motor encoders interface with the Raspberry Pi for navigation processing.
+
+\subsection{Process Flow}
+The initial setup of the system begins with the mapping mode.
+The user would move the robot using a joystick or the web app so that the environment can be mapped and restricted areas like stairs and walls marked.
+This map will be displayed and can be labeled on the web app so that operators can use it to schedule deliveries. 
+
+As patients are admitted, RFID tags and BLE Beacons will be issued to them.
+It will be registered to each recipient with their names and any other necessary information.
+During the delivery assignment phase, wards and patients are selected for delivery on the app.
+An optional custom message can also be added.
+The Mode is then changed manually on the web app or the keypad on the robot chassis.
+
+The robot goes to these wards and scans for the closest beacon of scheduled patients and goes there.
+It plays out the custom message through its speakers and asks the recipient to scan their RFID tag.
+It should be scanned before, for patient identification and after delivery, for confirmation of delivery.
+If no or wrong RFID is scanned, it waits for a predefined time for a correct RFID scan before moving on to the next nearest recipient.
+It goes to the next task and does the same thing.
+After all deliveries are completed, it returns to its base on the map and awaits further instructions. 
+
+For any BLE signal not found, it moves on to the next patient before trying again.
+If it has tried to find the signal more than 3 times, it stops trying and automatically labels it as a missed delivery and updates it on the web app.
+Figure~\ref{fig:flow_chart} shows a simplified flow chart of this process. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/image62.png}
+    \caption{Flow Chart Showing Process Flow}
+    \label{fig:flow_chart}
+\end{figure}
+
+\subsection{Software Architecture}
+This includes all the software technologies and designs to be used in the system, including the web app technologies and the robot's control system.
+
+
+The Web app utilizes the Next.js framework as its frontend framework and Fastify (Node.js) with TypeScript for API development.
+MongoDB would be used for database management.
+The web app supports features like mode switching, task scheduling, manual control, display of live maps, tracking, and patient and recipient data management.
+WebSockets, Rosbridge\_suite and MQTT will be used for real time updates.
+
+
+The robot requires path-planning algorithms to navigate its environments.
+
+A* Algorithm is used as a global path planning tool to find the shortest path between the robot's current position and the target destination. It uses a heuristic function to minimize costs efficiently.
+
+The Dynamic Window Approach (DWA) generates a local path for obstacle avoidance. If any obstacle is found on the robot's path, the old path will be replaced with a new one to avoid that obstacle \parencite{nguyen_obstacle_nodate}. It then adjusts the direction and the velocity of the robot to avoid collisions.
+
+To identify and locate recipients, the robot scans for BLE beacons assigned to scheduled individuals.
+It estimates distance based on RSSI (Received Signal Strength Indicator), selects the closest patient, and moves in its direction.
+
+
+\subsection{ROS Based Architecture}
+This project uses the Robot Operating System (ROS) as the framework for interaction, navigation, and perception among components.
+The architecture of the system follows a modular ROS-based architecture where each node performs a particular task and communicates with each other using ROS topics, services, and actions. 
+
+ROS2 is a more modern build system and offers several advantages and features over ROS1, including better real time capabilities, improved performance and scalability, robust communication system, cross-platform support, etc.
+ROS2 contains several distributions with ROS 2 Jazzy Jalisco being the most recent LTS distribution at the time of this writing and will therefore be utilized in this project.
+It has improved real-time capabilities, deterministic DDS communication, multi-threaded executors, and compatibility with Ubuntu 24.04.
+
+\subsubsection*{System Architecture}
+\phantomsection
+\addcontentsline{toc}{subsubsection}{System Architecture}
+\begin{enumerate}
+    \item \textit{Sensing Layer:} \\
+    This layer should collect relevant environmental and other types of data using onboard sensors such as the Slamtec RP Lidar C1, MPU6050 IMU, RFID modules, and BLE beacons.
+    \begin{enumerate}
+        \item The Laser node publishes \texttt{/scan} data for mapping and obstacle detection.
+        \item The IMU node publishes orientation data to \texttt{/imu/out}.
+        \item RFID and BLE data are transmitted through the ESP32 to ROS topics.
+        \item The data fusion node integrates encoder, IMU, and Lidar data by applying an Extended Kalman Filter (EKF) from the \textit{\texttt{robot\_localization}} package to stabilize the pose of the robot.
+    \end{enumerate}
+
+    \item \textit{Planning Layer:} \\
+    ROS2 has a Nav2 framework which manages navigation as well as path and motion planning. This framework covers costmaps, global, local planning and a lot of other technicalities needed for efficient navigation.
+
+    \item \textit{Control Layer:} \\
+    The ros2 control framework handles actuation. It makes use of a mecanum drive controller plugin to calculate the velocity of wheels using inverse kinematics. These velocity commands should be converted into PWM signals for the L298N motor drivers with a custom hardware interface.
+    Encoder data is also read back and published so that localization and SLAM nodes can use it.
+
+    \item \textit{Scheduling Layer:} \\
+    The robot should subscribe to essential tasks topics managed by a WebSockets/MQTT based Node.js web backend.
+    Tasks manager node ranks tasks on a queueing system derived by proximity to the robot.
+    The scheduler communicates with the navigation goals by ROS actions.
+
+\end{enumerate}
+
+\subsubsection*{Safety Chain}
+\addcontentsline{toc}{subsubsection}{Safety Chain}
+
+Safety is carried out through different mechanisms integrated into the control loop.
+
+\textit{Speed and Separation Monitoring (SSM):} \\
+Safety zones are expanded dynamically behind obstacles and human beings using the local costmap.
+The parameters of velocity scaling are used to modify the proximity thresholds (less than 0.6 m) when they are exceeded.
+
+\textit{Emergency Stop (E-Stop):} \\
+A web switch which uses interrupts should ensure that PWM outputs to motor drivers are stopped immediately.
+The respective node suspends the controller manager.
+
+
+\subsubsection*{ROS2 Components}
+\addcontentsline{toc}{subsubsection}{ROS2 Components}
+The system will have the following ROS2 based components:
+
+\begin{enumerate}
+  \item \textbf{Control and Hardware Interface:} 
+ 
+  ROS2 provides a modular framework called \texttt{ros2\_control} for controlling the hardware through controllers that process commands, loaded as plugins.
+
+  ROS2 Control contains controller plugins which can be selected based on the drive of your robot, such as 
+    \path{diff_drive_controller}, 
+    \path{mecanum_drive_controller}, 
+    \path{ackermann_steering_controller}, 
+    \path{tricycle_controller} 
+    and others, all of which are managed by the \path{controller_manager}.
+  If the specific plugin needed does not exist, custom controller plugins can also be written and added. Necessary parameters like the \texttt{wheel\_radius} (0.0485 m), \texttt{sum\_of\_robot\_center\_projection\_on\_X\_Y\_axis} (0.7 m) are added.
+
+  The Hardware Interface connects ROS2 to the actual hardware. It receives the processed commands from the controllers and sends those commands to the motors through a specified communication protocol like Serial, Micro-ROS, etc.
+  It also reads feedback like encoder values from the motors which can be published and used in other parts of the application.
+
+  \item \textbf{Local Localization:}
+
+  Localization involves determining a robot's position and orientation within its environment in real time. Local Localization is tracking the pose of the robot as it progresses from its starting point. 
+  ROS2 provides a \texttt{robot\_localization} package which contains an Extended Kalman Filter (EKF). 
+  An Extended Kalman Filter (EKF) is a mathematical algorithm used to fuse data from multiple sensors like wheel encoder odometry, IMU data, etc. 
+  This augments odometry with more stable local pose estimate, and less drift and noise.
+
+  \item \textbf{Global Localization:}
+  
+  Global Localization estimates the robot's pose on a fixed map, even without the knowledge of where it started from.
+  ROS2 provides several algorithms for this, one of which is AMCL (Adaptive Monte Carlo Localization).
+  AMCL is a probabilistic localization algorithm based on particle filters. It takes in the robot's laser scans, map, odometry, uses thousands of particles which signifies possible guesses of where the robot might be and compares expected laser scans from the map with real scans from the LIDAR.
+  After a few moves, particles eventually converge to the most likely location.
+
+  \item \textbf{Mapping and SLAM:}
+  
+  Simultaneous Localization and Mapping (SLAM) helps the robot to build a map while figuring out where it is on that map. 
+  The map it builds can be represented in different forms depending on the sensors being used and the user's preference. 
+  The most commonly used map representation is the 2D occupancy grid that contains pixels where each cell holds a value that represents the probability of that space being occupied. 
+  While there are also multiple packages in ROS2 for building maps, \texttt{slam\_toolbox} will be used in this project.
+
+  \item \textbf{Costmaps:}
+  
+  A Costmap is a unified map that integrates diverse information about the environment taken from multiple sources.
+  Instead of just the information of "free" or "occupied", each cell in the costmap stores additional information like how risky it is to move there.
+  Costmaps are organized into multiple layers, each providing specific information. ROS2 Nav2 package uses two main costmaps: Global and Local Costmaps.
+
+  The Global Costmap provides a complete representation of the environment and is primarily used for planning paths to destinations. 
+  Layers used here include: \texttt{static\_layer} which loads the fixed map of the environment, \texttt{obstacle\_layer} which provides real-time sensor data to identify new obstacles, \texttt{inflation\_layer} which inflates the identified obstacles to safe navigational buffers, etc.
+
+  The Local Costmap provides a local view of the robot's immediate surroundings, typically covering just a few meters, and is used for motion planning and obstacle avoidance. 
+  Layers usually used here are the \texttt{obstacle\_layer} to locate the obstacles in the immediate vicinity and \texttt{inflation\_layer} to give safe navigation clearance, etc.
+
+  \item \textbf{Path Planning and Smoothening:}
+  ROS2 provides a high quality framework for anything navigation called \texttt{nav2}.
+  It contains several plugins for planning and smoothing paths, motion planning, etc.
+  In this project, \texttt{nav2\_smac\_planner} will be used for the path planning.
+  This planner uses the A* and hybrid-A* algorithms on the global costmap to compute an optimal path, which does not cross known obstacles. 
+  \texttt{nav2\_smoother} will also be utilized to smooth the intended path produced by the Smac Planner. It eliminates sharp turns and makes the path smooth such that the robot flows freely in corridors.
+  
+  \item \textbf{Motion Planning / Local Control:}
+  
+  Motion Planning involves converting the planned path into velocity commands.
+  Finding the most suitable plugin to use in nav2 depends on the robot's drive, use case, anticipated performance and computational requirements of your robot.
+  For an Omnidirectional drive, there are different options:
+
+    \begin{enumerate}
+        \item \textit{Nav2 rotation shim controller and Nav2 regulated pure pursuit controller:} 
+        The combination offers responsive path following and dynamic speed control.
+        Pure Pursuit controller enables the robot to move along the curve in a more natural way and to decelerate around sharp turns or any obstacles.
+        The Rotation Shim plugin will make sure that suitable in-place orientation corrections are made before or after linear moves.
+
+        \textit{Advantages:} 
+        \begin{itemize}
+            \item Smooth paths, which are natural and good in small areas.
+            \item Handles continuous path of any curvature without too much oscillation.
+            \item The speed is regulated inbuilt with regard to the curvature and distance to obstacles.
+        \end{itemize}
+
+        \textit{Limitations:} 
+        \begin{itemize}
+            \item Tuning is not easy to do right.
+            \item Performance is also a little lower in very cluttered places than trajectory sampling planners.
+        \end{itemize}
+
+        \item \textbf{Dynamic Window Approach (DWA/DWB):} The Dynamic Window Approach planner assesses several forward trajectories at every cycle and rates them according to costmap safety, goal heading and velocity alignment.
+        \texttt{dwb\_core} is a variant of the DWA Algorithm.
+
+        \textit{Advantages:}
+        \begin{itemize}
+            \item Very sensitive; suitable for fast recuperation in dynamic situations.
+            \item Can be easily extended to cost functions (e.g., obstacle cost, goal alignment).
+        \end{itemize}
+
+        \textit{Limitations:}
+        \begin{itemize}
+            \item Is able to produce sudden change or zigzagging movements unless smoothed.
+            \item Needs much tuning to work well with mecanum wheels.
+        \end{itemize}
+    \end{enumerate}
+
+  \item \textbf{Recovery and Behavior Trees:}
+  
+  The behavior trees offer an organized manner in which the robot can deal with complex behaviors such as task execution, recovery actions and state transitions.
+  It allows the robot to make an effort of replanning, re-localization, or safe stop in the case of surprise obstacles.
+  The nav2 package for this is the \texttt{nav2\_bt\_navigator}.
+  Nav2 also offers the \texttt{nav2\_behaviors} package for creating behaviours.
+  Behaviors are recovery strategies called in the case of unexpected failures during navigation.
+  Custom behaviors can be created and the ones present in nav2 include spin, backup, wait, etc.
+
+\end{enumerate}
+
+
+\subsection{Kinematics Model}
+A kinematic model is a mathematical representation of a robot's motion behavior.
+Unlike conventional wheeled robots, Mecanum wheels allow omnidirectional movement due to the rollers attached at 45° at its circumference. 
+Figure~\ref{fig:mecanum_wheel} shows an image of a typical Mecanum wheel.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/image43.png}
+    \caption{Mecanum Wheel}
+    \label{fig:mecanum_wheel}
+\end{figure}
+
+When four Mecanum wheels are used together, we can achieve a net resulting direction in any direction by varying the direction and speed of rotation of the wheels. For example, by changing the velocities of the diagonal wheels, a motion between 0° to
+360° can be achieved. 
+Figure~\ref{fig:omni_motions} shows different motions that can be achieved when the direction of each wheel is changed.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/image52.png}
+    \caption{Motions of Omnidirectional Platform }
+    \label{fig:omni_motions}
+\end{figure}
+
+The kinematic equations describe how each wheel's angular velocity translates into the linear and angular motion of the overall robot.
+
+Forward Kinematics in robotics computes the position of the end effector using specified joint parameters \parencite{noauthor_mecanum_nodate}.
+In this case, forward kinematics computes the robot's global velocity using the angular velocity of each wheel.
+Given four wheels, each at a 45° angle, the relationship between wheel velocities and robot movement is expressed as:
+
+\begin{equation}
+\begin{aligned}
+v_x &= (\omega_{fl} + \omega_{fr} + \omega_{rl} + \omega_{rr}) \cdot \frac{r}{4} \\
+v_y &= (-\omega_{fl} + \omega_{fr} + \omega_{rl} - \omega_{rr}) \cdot \frac{r}{4} \\
+\omega_z &= (-\omega_{fl} + \omega_{fr} - \omega_{rl} + \omega_{rr}) \cdot \frac{r}{4(l_x + l_y)}
+\end{aligned}
+\label{eq:mecanum_velocities}
+\end{equation}
+
+Or in matrix form:
+
+\begin{equation}
+\begin{bmatrix}
+v_x \\
+v_y \\
+\omega_z
+\end{bmatrix}
+=
+\frac{r}{4}
+\begin{bmatrix}
+1 & 1 & 1 & 1 \\
+-1 & 1 & 1 & -1 \\
+-\frac{1}{l_x + l_y} & \frac{1}{l_x + l_y} & -\frac{1}{l_x + l_y} & \frac{1}{l_x + l_y}
+\end{bmatrix}
+\begin{bmatrix}
+\omega_{fl} \\
+\omega_{fr} \\
+\omega_{rl} \\
+\omega_{rr}
+\end{bmatrix}
+\end{equation}
+
+Where:
+\begin{itemize}
+  \item \(r\) is the wheel radius, in this case, $ 97mm / 2 = 48.5mm = 0.0485 m$,
+  \item \(l_x\)  is the robot's length or half of the distance between the front wheels (200mm),
+  \item \(l_y\) is the robot's width or half of the distance between the front and rear wheels (150mm),
+  \item \(\omega_{fl}, \omega_{fr}, \omega_{rl}, \omega_{rr}\) are the angular velocities of the four wheels - front left, front right, rear left, rear right,
+  \item \(v_x\) and \(v_y\) are the linear velocities in the x and y directions, and \(\omega_z\) is the angular velocity around the z-axis (yaw).
+\end{itemize}
+
+Inverse Kinematics involves finding joint parameters that achieve a specified end effector's position.
+In this case, inverse kinematics computes each wheel's angular velocity needed to achieve a given robot's global velocity.
+This relationship can be expressed as:
+
+\begin{equation}
+\begin{aligned}
+% \begin{align}
+\omega_{fl} &= \frac{1}{r}(v_x - v_y - \omega_z (l_x + l_y)) \\
+\omega_{fr} &= \frac{1}{r}(v_x + v_y + \omega_z (l_x + l_y)) \\
+\omega_{rl} &= \frac{1}{r}(v_x + v_y - \omega_z (l_x + l_y)) \\
+\omega_{rr} &= \frac{1}{r}(v_x - v_y + \omega_z (l_x + l_y))
+\end{aligned}
+\end{equation}
+
+Or in matrix form:
+\begin{equation}
+\begin{bmatrix}
+\omega_{fl} \\
+\omega_{fr} \\
+\omega_{rl} \\
+\omega_{rr}
+\end{bmatrix}
+=
+\frac{1}{r}
+\begin{bmatrix}
+1 & -1 & -(l_x + l_y) \\
+1 & 1 & (l_x + l_y) \\
+1 & 1 & -(l_x + l_y) \\
+1 & -1 & (l_x + l_y)
+\end{bmatrix}
+\begin{bmatrix}
+v_x \\
+v_y \\
+\omega_z
+\end{bmatrix}
+\end{equation}
+
+Given the maximum RPM of the motors (178 RPM) and wheel size (97 mm diameter), the maximum theoretical velocity can be estimated as:
+
+\begin{equation}
+V_{\max} = \frac{\pi d \cdot \text{RPM}}{60} = \frac{\pi \times 0.097 \times 178}{60} \approx 0.9 \text{ m/s}
+\end{equation}
+
+\subsection{Mathematical Modeling of the Autonomous Robot System}
+In order to correctly describe the logic of operation, movement, and decision-making of the medical delivery robot, the system is segmented into four subsystems: motion kinematics, local planning and control, behaviour modeling, and task scheduling.
+All the parts are mathematically modeled with the figures and tables.
+
+\subsubsection*{Path Planning - SmacPlanner2D}
+\phantomsection
+\addcontentsline{toc}{subsubsection}{Path Planning - SmacPlanner2D}
+The core of the SmacPlanner2D is A* search algorithm on the global costmap grid.
+A* is a graph search algorithm which uses a cost function to expand nodes (grid cells).
+The cost function for the A* is mathematically represented as:
+
+\begin{equation}
+f(n) = g(n) + h(n)
+\end{equation}
+
+Where:
+\begin{itemize}
+  \item \(n\): A node (grid cell)
+  \item \(g(n)\): Actual cost from start to node \(n\) (path cost so far)
+  \item \(h(n)\): Heuristic estimate from \(n\) to the goal (guess of remaining cost)
+\end{itemize}
+
+The heuristic function is an estimate of the cost from the current node to the goal.
+There are multiple options for the calculation of the heuristic function, including:
+\begin{itemize}
+  \item Euclidean Distance: \(\sqrt{dx^2 + dy^2}\)
+  \item Manhattan Distance: \(|dx| + |dy|\)
+  \item Diagonal/MOORE Distance: \(\max(|dx|, |dy|)\)
+\end{itemize}
+Where \(dx\) and \(dy\) are the differences in x and y coordinates between the current node and the goal node. \\
+The algorithm chooses the next node with the lowest \(f(n)\).
+
+Each grid cell has a cost from the global costmap: 0 for free space, 1–254 for inflation zones and 255 for lethal obstacles to be avoided. The grid cost \(g(n)\) is represented as:
+\begin{equation}
+\begin{aligned}
+g(n) &= g(n_{\text{prev}}) + \text{step\_cost}(n_{\text{prev}}, n) \\
+g(n_{\text{next}}) &= g(n_{\text{current}}) +  \text{distance}(n_{\text{next}}, n_{\text{current}}) + \text{costmapvalue}(n_{\text{next}})
+\end{aligned}
+\end{equation}
+
+SmacPlanner adds additional penalties to entering high-cost cells (inflation zones), turning (in some configs) and distance traversed (based on grid resolution). 
+
+SmacPlanner2D uses costmap values in its cost model. These are exaggerated, and thus, ensure the robot does not go through narrow corridors when there are other better ways.
+The route is penalised when it uses expensive cells and the planner will use open and safer spaces.
+
+\subsubsection*{Regulated Pure Pursuit Controller (Path Following)}
+\addcontentsline{toc}{subsubsection}{Regulated Pure Pursuit Controller (Path Following)}
+
+Given a goal point \((x_g, y_g)\), current robot pose \((x_r, y_r, \theta_r)\), and lookahead distance \(L_d\), we define the curvature \(\kappa\) as:
+\begin{equation}
+\begin{aligned}
+\kappa = \frac{2 y_L}{L_d^2} \equiv \omega = v\cdot\kappa = \frac{2 v \cdot \sin(\theta_r)}{L_d}
+\end{aligned}
+\end{equation}
+
+Where:
+\begin{itemize}
+  \item \(y_L\): lateral offset to the lookahead point
+  \item \(\theta_r\): heading error between the robot's current orientation and the direction to the lookahead point
+  \item \(v\): linear velocity of the robot regulated by the curvature and obstacle distance
+\end{itemize}
+
+\textit{Velocity scaling factor} \\
+The velocity scaling factor can be written as:
+\begin{equation}
+\begin{aligned}
+    v &= v_{\max} \cdot \exp (-\alpha \cdot |\kappa|) \\
+    v &= v_{\max} \cdot \min\left(1, \alpha d_{\text{obs}}, \beta \frac{1}{|\kappa| + \epsilon}\right)
+\end{aligned}
+\end{equation}
+with tuning constants \(\alpha, \beta\) and small \(\epsilon\) to avoid division by zero.
+
+\subsubsection*{DWB Trajectory Sampling Model}
+\addcontentsline{toc}{subsubsection}{DWB Trajectory Sampling Model}
+
+The controller generates candidate trajectories and assigns a total cost:
+\begin{equation}
+\text{score} = w_p d_p + w_g d_g + w_o c_o
+\end{equation}
+
+Where:
+\begin{itemize}
+  \item \(d_p\): distance from the global path
+  \item \(d_g\): distance from final goal
+  \item \(c_o\): cost from obstacle proximity (from costmap)
+\end{itemize}
+
+Example: Table~\ref{tab:dwa_scoring} Trajectory Scoring Example in DWB Local Planner Using Weighted Cost Function
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\hline
+Trajectory & Path Error & Goal Error & Obstacle Cost & Score ($w_p=1, w_g=2, w_o=3$) \\
+\hline
+T1 & 0.2 & 0.4 & 0.1 & 0.2 + 0.8 + 0.3 = 1.3 \\
+T2 & 0.3 & 0.2 & 0.5 & 0.3 + 0.4 + 1.5 = 2.2 \\
+\hline
+\end{tabular}
+\caption{Example DWA Trajectory Scoring}
+\label{tab:dwa_scoring}
+\end{table}
+
+\section{Experimental Plan}
+This section contains a few experiments that will validate the robot's capability.
+Each experiment below states the experimental design, the primary performance indicators to be measured, and explicit pass/fail criteria.
+
+Table~\ref{tab:evaluation_scenarios} defines the experiments and KPIs. Results from each experiment will be reported in Chapter 4.
+
+\renewcommand{\arraystretch}{1.3} % increase row height (default is 1.0)
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{0.8cm}|
+                >{\centering\arraybackslash}m{2.5cm}|
+                >{\centering\arraybackslash}m{3.0cm}|
+                >{\centering\arraybackslash}m{6.5cm}|}
+% \begin{tabularx}{\textwidth}{|c|c|X|X|}
+\hline
+\textbf{ID} & \textbf{Name} & \textbf{Design} & \textbf{Primary KPIs \& Pass Criteria} \\
+\hline
+E1 & Doorways / Narrow Gaps & Single design; door widths 70--90 cm, intermittent blockages & Transit success rate, clearance distance, pause duration per transit. Runs: 20 transits per doorway. Pass: success $\geq$95\%, zero contacts, pause $\leq$2 s. \\
+\hline
+E2 & Localization Robustness & Single design; 10 CW + 10 CCW laps; 5 laps with lidar occlusion & Tag-pose RMSE, relocalization time after occlusion, drift per distance. Pass: RMSE $\leq$10 cm / 3$^\circ$, relocalize $\leq$3 s, drift $\leq$1\% per 10 m. \\
+\hline
+E3 & Energy \& Endurance & Single design; loops until low battery at 0 / 5 kg payloads & Wh/100 m, Wh/task, operating time to cutoff, rate of efficiency loss with payload. Pass: report full curves; efficiency loss $\leq$15\% at 5 kg vs 0 kg. \\
+\hline
+E4 & Payload / CoM Sensitivity & Single design; payloads 0 / 3 / 5 / 7 kg and top-heavy configuration & Tracking error, stop distance, oscillation, settling time, tip/instability events. Pass: stop distance increase $\leq$25\% at 7 kg; no tip or sustained instability. \\
+\hline
+E5 & Fault Injection \& Safety & Lidar/camera dropout, Wi-Fi loss, inflation=0, e-stop & Detection latency, safe-state stop time, recovery/abort time, collisions. Faults: lidar/camera dropout, Wi-Fi loss, encoder failure, e-stop. Pass: emergency stop $\leq$0.3 s; recover/abort $\leq$5 s when possible; zero collisions. \\
+\hline
+\end{tabular}
+\caption{Evaluation Scenarios, Design, and Primary KPIs with Pass Criteria}
+\label{tab:evaluation_scenarios}
+\end{table}
+
+
+\section{Testing \& Iteration}
+Testing and iteration allow issues to be identified, analysed, and resolved.
+The first step of the testing process starts with the deployment in a virtual hospital environment, and its navigation will be tested using tools like Gazebo and RViz.
+
+If the simulation is successful, the physical tests will be attempted in a controlled space that has similar characteristics to an actual hospital.
+The robot's ability to meet its set requirements will be tested.
+The final prototype will then be deployed in a live hospital.
+
+For these tests, some performance metrics will be analysed:
+\begin{itemize}
+  \item \textit{Navigational Accuracy}: The ability of the robot to reach its precise destination.
+  \item \textit{Delivery Accuracy}: The robot's ability to deliver supplies timely and accurately.
+  \item \textit{Obstacle Avoidance}: The robot's ability to detect and avoid obstacles.
+  \item \textit{Recipient Identification}: The robot's ability to validate, locate, and confirm the designated patient or recipient.
+  \item \textit{Map Accuracy}: Does the generated map accurately represent the real hospital floor plans?
+  \item \textit{Battery Performance}: Test how long the robot can operate before it needs to be recharged.
+\end{itemize}
+
+Following each test cycle, necessary adjustments are made and iterated into the process.

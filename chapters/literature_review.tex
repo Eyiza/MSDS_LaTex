@@ -1,0 +1,673 @@
+% Section 1
+\section{Introduction}
+Healthcare delivery has experienced an essential transformation because of medical service robots and these devices contribute to operational productivity. This paper examines robotic technology's potential to transform patient care along with medical care logistics whereas it also explores robotic integration within healthcare systems. This thesis examines how these technologies developed for healthcare usage and provides present applications so scientists can forecast their future progression in medical sectors. This review demonstrates a complete overview of the medical technology background combined with its current practices and an examination of projected future trajectories in the healthcare domain.
+
+\subsection{Overview and Significance}
+Healthcare institutions rely on autonomous robots because they make essential improvements to medical services and clinical management procedures. These robots administer regular administrative tasks, assisting medical care activities to lower medical personnel workloads and enhance medical treatment precision. This review explores how robots affect healthcare environments through their operational effects, required technological components, and deployment challenges.
+
+\subsection{Purpose of the Review}
+This literature review attempts to compile and summarize the most recent findings on how autonomous robots have been used in healthcare environments, diagnosis and knowledge gaps as well as future lines of inquiry. This conversation is needed to understand how robotic technology can further develop to be put into place in healthcare systems in a way that further improves patient experiences and service delivery.
+
+\subsection{Scope of the Review}
+This paper covers the history of autonomous robots in healthcare, the progress in their technological capabilities, and the way that they have been introduced to clinical settings. Although the review briefly considers some uses of these robots, an in-depth analysis of some operational difficulties, safety problems, and moral problems will be left to other sections.
+
+% Section 2
+\section{Historical Development of Medical Robots}
+
+\subsection{Early Development}
+The reason for the emergence of robotic assistance in healthcare was the requirement for better surgical precision and efficiency of medical procedures. In the early 1980s, robotics in healthcare was almost experimental, and it was used to enhance the capabilities of human surgeons in complex procedures. Among the most significant events that occurred during this period was the introduction of the PUMA 560, a robotic arm that was used for the first time in 1985 during a stereotactic brain biopsy, the first use of robotic assistance in surgery \parencite{Ginoya2021}. The outcome of this breakthrough would enable more surgical automation and robotic precision improvement.
+
+By the 1990s, the field of medical robotics was already quite developed and ROBODOC, a robotic system that was designed exclusively for orthopedic surgeries, was developed. The first use of robotic system used in total hip replacement procedures in 1992 was ROBODOC, a major step toward autonomous robotic assistance in surgery, which was able to achieve unprecedented precision in bone milling operations \parencite{Ginoya2021}. Later, after refinement of the ROBODOC system with additional safety mechanisms, including force sensing on all axes, the now improved surgeon control over robotic actions during procedures was possible.
+
+In the late 1990s, the field of autonomous robotics had made great strides, especially in the area of medical supply delivery inside hospitals. During this period trackless robotic couriers such as the HelpMate robot, transporting pharmacy supplies and patient records autonomously were explored. A sensor-based motion planning algorithm allows the early autonomous mobile robot the HelpMate robot to navigate dynamically in complex hospital environments. A schematic of the HelpMate robot and the components of the system that enabled its advanced functionality is provided in Figure~\ref{fig:helpmate_schematic} \parencite{Evans1994}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth, trim=0 1cm 0 0, clip]{figures/image59.png}
+\caption{Schematic Diagram of HelpMate \parencite{Evans1994}}
+\label{fig:helpmate_schematic}
+\end{figure}
+
+This development led to the TUG Robot, an autonomous transport system, through infrared and ultrasonic sensors used for real-time navigation, obstacle avoidance, and safe medication transport.
+
+Autonomous medical supply robots were first officially introduced in mainstream hospital operations in the 2000s. Panasonic's HOSPI systems, which were developed in 1998 and refined over the years, allowed hospitals to automate the supply chain management, medication delivery, and secure medical logistics, thereby reducing the burden of healthcare professionals and ensuring timely and error-free deliveries \parencite{Ginoya2021}, underscoring the transformative impact of robotics in healthcare logistics, as chronicled in Figure~\ref{fig:timeline_1990_2000}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth, trim=0 10cm 0 0, clip]{figures/image27.png}
+\caption{Timeline of Medical Robotics Development (1990–2000)}
+\label{fig:timeline_1990_2000}
+\end{figure}
+
+The developments in autonomous hospital logistics in the disillusioned years of 2010 were further spearheaded by the integration of robotics, powered by AI, and the Robot Operating System (ROS) as shown in Figure~\ref{fig:timeline_2010_2020}. In this age, robots became real-time data processing augmented Automated Mobile Robots (AMRs) with SLAM data processing and predictive analytics to make optimized route planning and scientific medical delivery possible \parencite{Thamrongaphichartkul2020}. These innovations resulted in the emergence of modern AI-driven fleet management systems that enable hospitals to use multiple robots working in collaboration in dynamic healthcare environments.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth, trim=0 0 0 20cm, clip]{figures/image27.png}
+\caption{Timeline of Medical Robotics Development (2010–2020)}
+\label{fig:timeline_2010_2020}
+\end{figure}
+
+\subsection{Evolution of Technological Capabilities}
+The authors \parencite{Aggarwal2019} argue that medical robot complexity and utilization domains have become more refined because of technological development. The integration of ROS (Robot Operating System) served as a critical framework that enabled the transition to different medical applications for self-operated medical supply distribution. The requirement of complex sensory and navigation systems for robots to operate in hospital environments was achieved through ROS.
+
+Next, these systems were further refined to deal with some challenges in healthcare logistics, for example, to overcome the busy hospital corridors and safely interact with patients and staff. Using the advancements in machine learning and artificial intelligence in ROS, these robots were able to increase operational efficiency by real-time data processing and autonomous decision-making \parencite{Chawla2022}.
+
+% Section 3
+\section{Technological Advancements and Innovation in Healthcare Robotics}
+In this section, the basic technology improvements used to greatly enhance autonomous robot capabilities and features in medical settings are explored.
+
+\subsection{Core Technological Developments}
+Healthcare automation has benefited most from current developments in robotics together with artificial intelligence (AI) systems which enabled the advancement of autonomous robots. Such core technological developments include the implementation of hospital patient sample-carrying Autonomous Mobile Robots (AMRs) in hospital logistics applications. These robots demonstrated automated precision docking abilities which allowed them to perform battery charge operations and other charging tasks. \textcite{Vongbunyong2021} established that technological innovations boost both operational efficiency and critical medical task accuracy in healthcare settings.
+
+AI implementations in autonomous robots provide the equipment with enhanced data processing abilities which result in more competent decision-making and operational efficiency. According to \textcite{Bacik2017}, automated guided vehicles used in hospital logistics now operate through the most recent software stacks for simultaneous localization and navigation.
+
+\subsection{Impact of Technological Advancements}
+Advances in healthcare technologies have substantial effects on various healthcare elements. According to \textcite{Dasari2024a} hospital robots used for patient care combined with logistics functions ease medical personnel labor. Medical robots handle official tasks which allows healthcare personnel to dedicate more time to treating patients and maximize healthcare resources for better delivery.
+
+\textcite{Chiu2020} illustrate the outstanding effects robotic technologies produce in procedures that benefit medical patients. The implementation of modern technology advances medical robots through enhanced detection models, including improved object detection for embedded systems which leads to higher quality care for patients.
+
+% Section 4
+\section{System Architecture and Framework for Autonomous Robots in Healthcare}
+A healthcare robotics system architecture functions as an organized framework that merges hardware with software elements together with sensors and communication systems for maintaining continuous medical facility operations. Main components include:
+
+\begin{itemize}
+    \item Sensor data collected from the Perception Layer enables map development for localization needs.
+    \item Decision Layer carries out AI-based selection procedures through its algorithms.
+    \item Motion control and actuator systems exist in the Control Layer.
+    \item Hospital management systems can connect through the Communication Layer.
+
+\end{itemize}
+
+Figure~\ref{fig:autonomous_medical_robot_architecture} depicts the architecture of an autonomous medical robot and shows how perception, control, actuation, and communication systems cooperate to achieve autonomous hospital operations.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/image48.png}
+\caption{Architecture of an Autonomous Medical Robot}
+\label{fig:autonomous_medical_robot_architecture}
+\end{figure}
+
+\subsection{Overview of System Architectures}
+The healthcare-specific autonomous robot design adopts architecture mechanisms that achieve effortless integration as well as dependable operational efficiency for medical logistics and patient care. According to \textcite{Thamrongaphichartkul2020}, these systems depend on modular platforms to achieve flexible operation as robots serve different healthcare environments. According to \textcite{Vongbunyong2021}, autonomous mobile robots (AMRs) achieve better real-time monitoring alongside control and communication functions through their integration with Internet of Things (IoT) platforms specifically within hospital logistics systems.
+
+\subsection{Human-Supervisory Control Systems}
+The Human-Supervisory Distributed Robotic System Architecture allows human expertise to be flexible and robust to integrate into autonomous robotic systems. This layered control gives the capability for human operators to intervene at any time when the robots cannot handle situations and the robots can independently execute routine tasks \parencite{Tan2015}. The coordination of individual robot-based tasks has augmented the hospital realm that hosts the multi-agent robotic system, like other hospitals.
+
+\subsection{Integration with Hospital Systems}
+\textcite{Haleem2022} state that autonomous robots are increasingly integrated with Hospital Information Systems (HIS) and Electronic Health Records (EHRs) to ensure smooth operation. The integration allows robots to get and update patient data, manage logistics, and ensure timely delivery of medical supplies. \textcite{Hellmund2016} also mention that a Robot Operating System (ROS) is widely used as a modular software framework for controlling robot navigation, task execution, and integrations.
+
+\subsection{Challenges in System Architecture}
+However, implementing autonomous robots in the healthcare domain is not as simple as it seems to be, because implementation in this domain is subject to many challenges.
+
+\begin{itemize}
+\item \textit{Scalability:} An efficient control system is needed to avoid operational bottlenecks \parencite{Sayed2020} in managing multiple robots in various hospital departments.
+
+\item \textit{Cybersecurity \& Data Protection:} Since healthcare data is so sensitive, there needs to be robust encryption and authentication protocols to prevent unauthorized access \parencite{Batth2018}
+
+\item \textit{Adaptability to Dynamic Environments:} In hospital settings with indeterminable environments like obstacles and patient movement, robots will require techniques to navigate efficiently such as Simultaneous Localization and Mapping (SLAM) \parencite{Alami1998}
+
+\end{itemize}
+
+
+\subsection{Case Studies and Applications}
+\begin{enumerate}
+    \item \textbf{IoT-Enabled Autonomous Mobile Robots for Hospital Logistics}
+    
+    In the case of autonomous mobile robots (AMRs) integrated with IoT in hospital logistics, \textcite{Thamrongaphichartkul2020} conducted a case study. These AMRs were implemented to increase efficiency in the supply chain operations by remotely monitoring and controlling through a web-based IoT platform. The study reported:
+    \begin{enumerate}
+        \item Decrease of 40\% in delivery errors resulting from automated tracking.
+        \item Improves operational efficiency in COVID-19 isolation wards by reducing the requirement for direct human contact in supply transportation.
+        \item Centralized control helps hospitals arrange route planning and minimize bottlenecks, enhancing fleet management.
+    \end{enumerate}
+
+    \item \textbf{Human-Supervisory Distributed Robotic System for Healthcare Automation}
+    
+    In their work, \textcite{Tan2015} present a multi-agent robotic system that was deployed in the U.S. Department of Veteran Affairs hospitals for automated sterilization and logistics. The robots were designed with:
+    \begin{enumerate}
+        \item Human-in-the-loop supervision that allows healthcare workers to override commands when needed.
+        \item Multiple robots coordinated in an automated manner to optimally reduce logistics flow and reduce task completion time by 35\%.
+        \item Support for large hospitals, for smooth operation in a dynamic environment.
+    \end{enumerate}
+    
+    The results of the study show that the human supervisory model is a safe and efficient way to retain human control over critical tasks.
+
+    \item \textbf{Multi-Agent Navigation for Medical Delivery in COVID-19 Hospitals}
+    
+    This thesis investigated a Centralized Multi-Agent SLAM system running in COVID-19 field hospitals \parencite{Sayed2020}. This system consisted of:
+    \begin{enumerate}
+        \item Hexapod robots for real-time mapping of hospital environments.
+        \item Six-wheeled robots for autonomous material transportation within intensive care units.
+        \item Task distribution systems centralized for less congestion and workflow boosting.
+    \end{enumerate}
+    
+    The deployment led to:
+    \begin{enumerate}
+        \item A 50\% increase in the efficiency of the hospital as a whole.
+        \item Reduction of infectious workplace environments for staff exposure.
+        \item AI-based SLAM models to optimize navigation and obstacle avoidance.
+    \end{enumerate}
+
+    \item \textbf{Internet of Robotic Things (IoRT) for Intelligent Automation in Healthcare}
+    
+    In their research, \textcite{Batth2018} studied the Internet of Robotic Things (IoRT) as a possible real-time-based decision-making framework in hospital logistics. Their case study demonstrated:
+    \begin{enumerate}
+        \item Integration of robotics into cloud-based analytics that can make predictive maintenance and optimize fleets.
+        \item Through the use of AI boosters, medical supply schedule delays are reduced by 28\%.
+        \item Secure management of patient data, according to privacy regulations.
+    \end{enumerate}
+    
+    The main finding demonstrates that IoRT facilitates hospital adaptability and decision-making in emergency dynamic situations.
+
+    \item \textbf{ROS-Based Open-Source Software for Autonomous Hospital Robots}
+    
+    \textcite{SanchezLopez2016} investigated AEROSTACK, an open-source, ROS-based robotic framework for multi-purpose hospital automation. The framework was applied in:
+    \begin{enumerate}
+        \item Surgical material handling, reducing human intervention.
+        \item Hands-free delivery of medication using mobile robotic assistance for nurses.
+        \item Infection control, improving tasks of autonomous disinfection.
+    \end{enumerate}
+    
+    Hospitals implementing this framework observed:
+    \begin{enumerate}
+        \item A 30\% increase in operational efficiency.
+        \item Reduction in task completion time due to AI-driven task prioritization.
+        \item Scalability improvement, since the ROS-based architecture supported custom modifications for different medical applications.
+    \end{enumerate}
+\end{enumerate}
+
+% Section 5
+\section{Integration of Autonomous Robots in Medical Supply Delivery}
+
+\subsection{Overview of Autonomous Robots in Medical Supply Delivery}
+They have been widely implanted in hospitals for the automated delivery of medical supplies by autonomous robots. The hospital corridor is patrolled by these robots, they avoid obstacles, and they are in a position to deliver supplies to predetermined locations without human intervention. The integration process involves:
+
+\begin{itemize}
+\item Robots utilize Simultaneous Localization and Mapping (SLAM) and GPS tracking to navigate rather efficiently \parencite{Prio_nodate}.
+\item \textit{AI-Driven Navigation:} AI-driven navigation routes and avoids congestion \parencite{Takei_nodate}.
+\item Intuitive interfaces make it possible for staff to interact with robots as effortlessly as they can interact with each other \parencite{Cremer2016}.
+\end{itemize}
+
+\subsection{System Connectivity and Interoperability}
+Autonomous medical robots must have some level of connectivity and interoperability with hospital systems already in use. Successful integration requires:
+
+\begin{itemize}
+\item \textit{Real-Time Supply Tracking:} Autonomous robots should communicate with the Electronic Health Records (EHRs) and inventory management systems to track supply deliveries in real-time \parencite{Pashangpour2024}.
+ 
+\item \textit{The IoT-enabled robots} enable and improve remote monitoring and predictive maintenance \parencite{Batth2018}.
+
+\item \textit{Robot Operating System (ROS) based frameworks:} Such frameworks enable the use of standardized communication protocols \parencite{SanchezLopez2016}.
+\end{itemize}
+
+Figure~\ref{fig:ros_navigation_system} illustrates that the Robot Operating System (ROS) plays a crucial role in enabling multi-robot coordination, AI-driven route optimization, and real-time obstacle avoidance. ROS provides modular and scalable navigation frameworks, allowing hospitals to deploy multiple autonomous robots efficiently.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/image49.png}
+\caption{ROS-Based Navigation System for Medical Delivery Robots}
+\label{fig:ros_navigation_system}
+\end{figure}
+
+\subsection{Implementation Strategies for Autonomous Medical Robots}
+Strategic planning is necessary for implementing autonomous medical robotic deployment. Effective implementation strategies include:
+
+\begin{enumerate}
+    \item \textit{Pilot Testing and Gradual Deployment}
+    \begin{itemize}
+        \item Pilot programs allow hospitals to test the feasibility of autonomous robots.
+        \item \textcite{Evans1994} explains that this approach helps maintain minimal disruption to current workflows.
+        \item Gradual deployment enables staff adaptation and system refinement before full-scale implementation.
+    \end{itemize}
+
+    \item \textit{AI-Powered Route Optimization}
+    \begin{itemize}
+        \item Real-time hospital traffic patterns are analyzed by AI-driven models.
+        \item Routes are adjusted dynamically to ensure on-time delivery \parencite{Rahman_nodate}.
+        \item \textcite{Takei_nodate} present Hamilton-Jacobi-based path planning for improving robot adaptability in crowded environments.
+    \end{itemize}
+
+    \item \textit{Infrastructure Adaptation}
+    \begin{itemize}
+        \item Automated door systems, robot-friendly elevators, and designated lanes can be required for hospitals to increase robot efficiency \parencite{Babu_nodate}.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Collaboration with Healthcare Professionals}
+It is important to have collaboration from healthcare professionals to succeed. Therefore, robots need to be designed to be complementary, but not replace, human workers.
+
+\begin{enumerate}
+    \item \textit{Training and Workforce Adaptation}
+    \begin{itemize}
+        \item Human-robot interaction is made smooth by workshops and training sessions for hospital staff.
+        \item Interfaces that are easier to use increase adoption rates among non-technical healthcare professionals \parencite{Cremer2016}.
+    \end{itemize}
+    
+    \item \textit{Human-Supervisory Models}
+    \begin{itemize}
+        \item Human-in-the-loop supervision allows staff to intervene in critical situations to keep safety and reliability \parencite{Tan2015}.
+    \end{itemize}
+    
+    \item \textit{Enhancing Patient Experience}
+    \begin{itemize}
+        \item Integrating robotics into patient care reduces waiting times for supply deliveries and improves patient care.
+        \item Social robots powered by AI can communicate with patients and engage them in conversations \parencite{Pashangpour2024}.
+    \end{itemize}
+\end{enumerate}
+
+
+\subsection{Overcoming Integration Barriers for Autonomous Robots in Healthcare}
+The benefits, however, make the integration of autonomous robots into healthcare logistics challenging.
+
+\begin{enumerate}
+    \item \textit{Infrastructure Challenges}
+    \begin{itemize}
+        \item Robot-compatible elevators, automated doors, and adequate charging stations are not present in many hospitals.
+        \item Solution: Retrofit hospital infrastructure to support autonomous navigation \parencite{Prio_nodate}.
+    \end{itemize}
+
+    \item \textit{Regulatory and Ethical Concerns}
+    \begin{itemize}
+        \item Hospital safety and data privacy regulations must be maintained by robotic systems.
+        \item Solution: Implement encryption of communication and restricted access to sensitive medical supplies \parencite{Prio_nodate}.
+    \end{itemize}
+
+    \item \textit{Resistance from Healthcare Workers}
+    \begin{itemize}
+        \item Resistance can occur due to fear of job displacement.
+        \item Solution: Position robots as assistive tools that supplement human labor rather than replace it \parencite{Cremer2016}.
+    \end{itemize}
+
+    \item \textit{High Initial Costs}
+    \begin{itemize}
+        \item Hospitals face significant capital expenditure for autonomous robot deployment.
+        \item Solution: Adopt Robot-as-a-Service (RaaS) models to reduce upfront costs and improve financial flexibility \parencite{Pashangpour2024}.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Case Studies on Autonomous Medical Supply Delivery}
+
+\begin{enumerate}
+    \item \textbf{HelpMate Robot: Early Integration of Autonomous Couriers in Hospitals} \\
+    \textit{System Features}
+    \begin{itemize}
+        \item 24-hour autonomous operation
+        \item Route optimization based on graph-based path planning
+        \item Multi-robot coordination for congestion management
+        \item Radio-based communication for hospital infrastructure integration \parencite{Evans1994}
+    \end{itemize}
+    \textit{Impact}
+    \begin{itemize}
+        \item Improved delivery efficiency and reduced workload for hospital staff
+    \end{itemize}
+    
+    \item \textbf{Six-Wheeled Differential Drive Robot for Secure Medical Delivery} \\
+    \textit{System Features}
+    \begin{itemize}
+        \item Differential drive design with six wheels
+        \item Password-protected storage compartments for secure medical deliveries
+        \item Simultaneous Localization and Mapping (SLAM) and real-time localization
+        \item Motion planning for energy efficiency \parencite{Prio_nodate}
+    \end{itemize}
+    \textit{Impact}
+    \begin{itemize}
+        \item Enhanced security and reliability of medical supply delivery
+    \end{itemize}
+    
+    \item \textbf{AI-Driven Mobile Medical Assistants} \\
+    \textit{System Features}
+    \begin{itemize}
+        \item AI-based adaptive navigation for dynamic hospital environments
+        \item Automated charging stations for uninterrupted operation
+        \item Real-time task coordination with hospital staff \parencite{Hossain2023}
+    \end{itemize}
+    \textit{Impact}
+    \begin{itemize}
+        \item Reduced human workload and improved hospital logistics
+    \end{itemize}
+\end{enumerate}
+
+% Section 6
+\section{Adaptation and Learning Capabilities of Autonomous Robots in Healthcare}
+All Autonomous robots in healthcare and emergency response need to possess adaptive and learning capabilities to operate in their dynamic respective environments. The capability that they provide allows robots to autonomously navigate, learn from patient interaction, and account for changes in healthcare protocols, as well as adaptation.
+
+\subsection{Adaptive Navigation and Decision Making}
+In a complex hospital environment, such environments need real-time adaptation. In the last few years, SLAM algorithms have become indispensable for artificial spatial awareness in real-time robots.
+According to \textcite{Ibrayev2024}, autonomous navigating is made better with Given 3D LiDAR and Normal Distribution Transform (NDT) Matching for real-time mapping and obstacle avoidance.
+In addition, robots have to cope with environmental uncertainties (changes in light conditions, patient movement, and emergencies).
+It is also stressed in his research from the RoboSAPIENS project, that deep learning models should be integrated with navigation systems for decision-making to take place in a trustworthy manner under uncertainty so that the robot can adapt to unforeseen circumstances.
+
+\subsection{Learning from Patient Interactions}
+Despite this, autonomous robots must learn to intuitively react to human interactions and 'self-improve' to be in a position to offer useful contributions to patient care.
+In this work, \textcite{Kim2024} propose a framework for LLMs to take on the natural roles of robotic health attendants for supporting adaptive task execution in healthcare as depicted in Figure~\ref{fig:learning_patient_interactions}.
+These robots interact with patients in real-time, positioning themselves to dynamically read what may be needed, how patients want to interact with them, and how the care routine can be altered. It reduces robot-patient interaction dependence on preprogrammed protocols, but this comes with the ability to adopt a more natural and context-aware robot-patient interaction.  
+
+Additionally, multimodal sensory processing, i.e. speech recognition and gesture recognition, enables medical robots to maintain speech and gesture communication flexibility (and patient preference) given the patient can use a range of speech or gesture communication styles.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/image68.png}
+\caption{Learning from Patient Interactions in Autonomous Medical Robots}
+\label{fig:learning_patient_interactions}
+\end{figure}
+
+\subsection{Integration with Evolving Healthcare Protocols}
+Now that healthcare protocols are changing, autonomous robots have to adapt their operational strategies based on new guidelines and best practices.
+This study considers a multimodal smart healthcare setting and a guideline of standardization to promote seamless integration across the healthcare systems.
+Standardizing data protocols such as HL7 for electronic health records (EHRs) minimizes the amount of time robots need for medical information exchange and processing.
+The other benefit is that robots can also implement adaptive AI models which would continuously update the knowledge base to comply with changing regulatory standards and medical standards.
+
+\subsection{Challenges in Adaptation}
+Nevertheless, progress has been made, but there are still many obstacles to the way of robot adaptation well in the healthcare setting. The main issue is to guarantee that robotic adaptations are reliable. As the RoboSAPIENS project puts it, safety and prevention from unintended consequences during adaptive learning require the real-time verification of robotic decisions. A challenge of this kind is to stay within the range of practical commercially available operations and computationally expensive deep learning models, and still be both adaptable and efficient. In addition, robots have to consider how to be ethical when dealing with patient privacy, information security, and informed consent and employ adaptive learning techniques.
+
+% Section 7
+\section{SAFETY AND HUMAN-ROBOT INTERACTION IN HEALTHCARE}
+
+\subsection{Establishing Safety Standards}
+For autonomous robots to be used in healthcare, they must be safe, and safety is extremely important.
+Because of the complexity of the hospital environment, robots should follow strict safety standards, design human-centric, be equipped with interactive safety features, and be trained extensively. These factors guarantee that robots can work alongside healthcare professionals without endangering the patient.  
+
+International safety regulations and guidelines underlie the safety of human-robot interaction in healthcare.
+\textcite{Valori2021} describe that in ISO 10218-1 and ISO 10218-2 standards, key safety principles for collaborative robots are defined, including limitations on power and force for reducing injury risks. These standards provide a regulatory framework that allows robots to be deployed in healthcare that are safe to operate around human workers without the need for physical barriers.
+These guidelines are further refined by the ISO/TS 15066 specification with force thresholds and acceptable interaction zones between humans and robots \parencite{Herrmann2010}.  
+
+In addition, researchers recommend risk assessment methodologies for validating healthcare robots' safety. In a path planning study by \textcite{Kazanzides2009}, robots estimate the real-time risk of operating in the environment and adjust their trajectories accordingly. It significantly improves robot safety by preventing unexpected collisions and easy interaction with hospital staff. New steps such as the COVR Toolkit present a method of structured safety validation to be used within the context of robotic systems before their deployment \parencite{Valori2021}.
+
+\subsection{Designing for Human-Centric Safety}
+To ensure the safety of the human-centric aspect with the use of healthcare robots, the human-centric safety feature should be prioritized. One particularly notable example of soft artificial leather padding to prevent injury from accidental collision is Lio, a personal health assistant robot, according to \textcite{Miseikis2020}. Collision detection, limited speed mechanisms, and compliant motion control are included in Lio to allow it to operate autonomously in healthcare facilities without harming humans.  
+
+The basic principle behind predictive hazard detection is another element in human-centric side design. \textcite{Mohamed_nodate} notes that studies in autonomous navigation in healthcare are useful in demonstrating the necessity of using deep learning models to predict human movement and adapt robotic behavior accordingly. According to \textcite{https://doi.org/10.1002/rob.20073}, the robotic assistants used in hospitals utilize computer vision and physiological sensors to estimate patient stress levels and adjust the interaction strategy to make the experience pleasant.
+
+\subsection{Interactive Safety Measures}
+For robot-human interaction to be safe, real-time safety mechanisms have to be implemented. Speed and Separation Monitoring (SSM) is described by \textcite{Valori2021} as one of the most effective strategies, where robots dynamically adjust their speed according to the distance of their near neighbors. This approach prevents the occurrence of safety or abrupt movements in crowded hospital settings.  
+
+\textcite{Herrmann2010} explain that other safety measures aim for force-controlled compliance, that is, the robots will exert minimal force on humans when in contact.
+This comes in handy, particularly for robotic assistants that perform physical tasks involving lifting patients or delivering medical supplies.
+According to \textcite{Mohamed_nodate}, human-aware navigation models empower robots to identify and avoid pedestrians to have smooth mobility in healthcare environments.  
+
+It was shown that adaptive motion planning algorithms improve safety by experimental simulation using Robot Operating System (ROS) and Gazebo \parencite{Mohamed_nodate}.
+The algorithms enable robots to predict human intentions and alter their paths around hospital workflow. Thus, medical robots can efficiently navigate while keeping a safe distance from healthcare workers and patients.
+
+\subsection{Training and Protocol Development}
+Then there need to be comprehensive training programs and standardized safety protocols to protect robots from being deployed in healthcare safely. A European project such as COVR Toolkit offers step-by-step testing methodologies to validate robot force impact, navigation accuracy, and emergency stop effectiveness \parencite{Valori2021}.
+Such a structured approach lets healthcare institutions test out compliance before robots are deployed for clinical application.  
+
+Training programs for healthcare professionals also are important in supporting smooth human-robot collaboration, in addition to technical safety protocols. The studies on hospital staff training with robotic assistants \parencite{https://doi.org/10.1002/rob.20073} emphasize that medical personnel should be familiarized with robotic behavior, interaction protocols, and manual override mechanisms. Hospital workers are taught the use of robotic systems hands-on and in simulation-based training, increasing their confidence in how to use them, while also understanding the limits of their safety.
+
+% Section 8
+\section{Operational Challenges and Solutions for Autonomous Robots in Healthcare}
+Incorporating autonomous robots into healthcare poses several operational hurdles that need to be overcome to enable the robots to be efficient, reliable, and harmonious with hospital environments. The key challenges are navigating complex environments, integrating with healthcare systems, human-robot interaction, and reliability and maintenance. It is important to respond to these problems to enhance the functionality and acceptance of robotic solutions used in medical contexts.
+
+\subsection{Navigating Complex Environments}
+Autonomous robots have to navigate in hospitals which are highly dynamic environments, where patients, medical staff, and changing layouts create complex and changing situations for them. The Reason Behind it: \textcite{FRAGAPANE2021405} explain that Simultaneous Localization and Mapping (SLAM) algorithms applied with LiDAR and computer vision enable robots to build real-time maps and utilize them to adapt to the presence of obstacles as they move. These technologies help autonomous material transportation by enabling robots to navigate hospital corridors without human intervention.
+
+Nevertheless, these advantages have not overcome the issue of remaining navigation conflicts, which is especially difficult for robots in high-traffic environments sharing navigation simultaneously. According to my research, decentralizing control in multiagent systems can improve movement path optimization and blockages \parencite{FRAGAPANE2021405}. However, machine learning-based predictive modeling may lead to further development of robots' ability to predict changes in hospital layouts and dynamically change their routes accordingly.
+
+\subsection{Integration with Healthcare Systems}
+Its integration with existing healthcare infrastructure is a major challenge in deploying autonomous robots in hospitals, said \textcite{Ness2024}. The legacy network still exists in many hospital systems, and communication between robots and Electronic Health Records (EHRs), hospital logistics, and pharmacy databases is not easy. Moreover, the absence of standardized communication protocols becomes a further hurdle to achieving interoperability, which means cannot work with teams of robotic fleets and hospital management systems.
+
+Healthcare robotics efforts include Health Level Seven (HL7) protocols and Internet of Robotic Things (IoRT) frameworks to improve communication between medical robots and hospital IT networks \parencite{Kabir2023}. Furthermore, any such medical robot can be connected among themselves using a Robotic Operating System (ROS) based architecture, which ensures the medical robots can go into the fleet management platform for coordination and efficiency \parencite{Kabir2023}.
+
+\subsection{Human-Robot Interaction}
+To be used widely in hospitals, autonomous robots must interact well with healthcare workers and patients as noted by \textcite{Holland2021}. The robot's ability to understand verbal and nonverbal cues helps in natural and intuitive communication and consequently influences user acceptance. The robots, including Lio and Pepper, use not only communications-based processing but also emotional recognition to enhance patient engagement and conversation with hospital staff as highlighted in \textcite{Miseikis2020}.
+
+\textcite{Holland2021} use adaptive user interfaces to explain how hospital staff interact with robots through gesture detection, touchscreen controls, and voice commands, which means that the tasks can be delegated seamlessly. \textcite{Christoforou2020} however mention that studies show that some hospital employees are not keen to interact with robots because they are not familiar or see them as a threat to job security. To enhance human-robot collaboration and to guarantee that medical staff is comfortable working with robotic assistants, they suggest training programs and hands-on demonstrations.
+
+\subsection{Reliability and Maintenance}
+According to \textcite{Kabir2023}, one can no longer afford to compromise on the long-term reliability of autonomous healthcare robots, since technical failures could disrupt hospital operations or jeopardize patients' safety. Such predictive maintenance strategies that rely on real-time diagnosis monitoring are of utmost importance for detecting potential failures even before they happen. According to \textcite{Ness2024}, robots need to be secured with strict cybersecurity measures as they are handling sensitive patient data and could be a target of cyber-attacks if not properly secured.
+
+Using AI-driven monitoring systems, hospitals can keep on monitoring the robot's performance in real-time and address problems like battery failures, navigation errors, and mechanical malfunctions immediately \parencite{Kabir2023}. It is important to pay attention to the development of redundant systems and fail-safe mechanisms in future developments to allow robots to continue working even in cases of partial system failures.
+
+% Section 9
+\section{Using ROS for Autonomous Robots in Medical Supply Delivery}
+
+In medical supply delivery, the Robot Operating System (ROS) has changed the way autonomous robots operate. ROS is an open-source, modular framework for navigation, coordination of tasks, fleet management, and system integration for hospital logistics. It is applied in autonomous medical supply delivery in this section, and system architecture, navigation strategies, fleet management, and deployment challenges are explored.
+
+\subsection{System Architecture and Fleet Management in ROS-Based Medical Supply Delivery}
+A fleet management system (FMS) for medical supply delivery robots is required to operate in a healthcare setting efficiently. The FMS based on ROS allows for real-time task allocation, scheduling, and coordination of multiple robots, delivering medical supplies. Research on hospital delivery robot fleet management emphasizes the need for centralized control systems that allocate the delivery tasks per the hospital logistics need, and thereby plan the path optimally and minimize the delivery time \parencite{Mac2024}.
+
+Moreover, robots can autonomously receive and perform delivery requests from hospital staff by integrating ROS-based navigation stacks with fleet management systems. Multi-robot coordination algorithms are included in this system to ensure that robots can avoid congestion in hospital corridors while completing delivery tasks \parencite{Gu_nodate}.
+
+The Rosbridge protocol is another major piece of the ROS architecture in medical supply delivery that allows for communication between robots, hospital networks, and cloud-based systems. This protocol facilitates real-time fleet monitoring, remote diagnostics, and task execution and thus is improving hospital supply chain efficiency \parencite{Laguna_nodate}.
+
+\subsection{Navigation and Path Planning Strategies in ROS-Based Hospital Environments}
+The crucial challenge of an autonomous medical supply delivery robot is efficient navigation in the complex hospital environment. They have to autonomously navigate corridors, avoid obstacles, and carry and deliver medical supplies to people while interacting with hospital infrastructure. These robots achieve autonomous movement using the features of the ROS navigation stack as obtained by integrating Simultaneous Localization and Mapping (SLAM), path planning algorithms, and sensor fusion techniques.
+
+Gmapping-SLAM is one of the primary mapping techniques used in ROS-based robots for the real-time construction of a map and self-localization in hospital corridors \parencite{Gu_nodate}. Search algorithms as well as the Dynamic Window Approach (DWA) are then utilized for global and local path planning, respectively, to allow robots to still adjust their paths on the fly as per their real-time sensor inputs.
+
+Finally, a study on indoor supply delivery robot navigation shows how ROS-based systems integrate multi-layer navigation frameworks which make robots navigate with the best possible routes considering hospital floor layout, obstacle detection mechanisms, and congestion management strategies \parencite{Rahman_nodate}. In addition, hospital delivery scenarios have been accomplished in ROS-based simulations with autonomous map generation, eliminating the need for manual navigation configurations \parencite{Xian_nodate}.
+
+\subsection{Human-Robot Interaction and Safety Considerations}
+The safe human-robot interaction (HRI) is critical to deploying medical supply delivery robots in healthcare environments. Human-aware navigation systems can be developed based on ROS that use sensor fusion techniques such as LiDAR, ultrasonic sensors, and computer vision to avoid disturbing the patients, doctors, and nurses while robots navigate \parencite{Garzon2017}.
+
+ROS-based robots adopt adaptive path planning mechanisms to adaptively adjust their trajectories in real time to facilitate real-time decisions in human-populated environments. The predictive motion control is emphasized in a study on multi-robot coordination that robots can anticipate human movement patterns and proactively adjust their navigation paths to avoid collisions \parencite{Garzon2017}.
+
+\subsection{Simulation and Testing of ROS-Based Medical Delivery Robots}
+Simulation environments are created before they are deployed in real hospital settings to first test them out in terms of their functionality, their navigation accuracy, and how efficient they can be when having to execute a task. Gazebo-based hospital simulation models developed using ROS allows the researchers to simulate a real-world hospital layout, and a controlled environment to test robot movement, obstacle avoidance, and scheduling of tasks \parencite{Xian_nodate}.
+
+These simulation models also help the robot to learn and AI training before real-world deployment of the robots, to handle complex scenarios. Simulation-based evaluations of battery efficiency, task completion rates, and fleet coordination strategies are presented as well as a simulation of robot performance before integration into hospital workflows \parencite{Laguna_nodate}.
+
+\subsection{Challenges and Future Directions in ROS-Based Medical Supply Delivery}
+While there are many advantages of robots that use ROS in medical supply delivery, there are also challenges in the implementation of such robots.
+
+\begin{enumerate}
+    \item \textit{Latency on the Network and Communication Levels:} The use of wireless communication protocols may result in latency problems in fleet coordination which require low latency 5G networks to efficiently execute tasks in real-time \parencite{Laguna_nodate}.
+    
+    \item Thus, robust scheduling algorithms must be created to prevent congestion and to distribute resources optimally, as the robotic fleets are to expand across large hospital networks \parencite{Mac2024}.
+
+    \item Robots must be able to learn continuously from their surroundings and adapt to human behavior, moving objects, and unpredictable hospital layouts \parencite{Gu_nodate}.
+
+\end{enumerate}
+
+% Section 10
+\section{Engineering Design Process for Autonomous Robots in Medical Supply Delivery Using ROS}
+
+Developing autonomous medical supply delivery robots that operate with a Robot Operating System (ROS) is a critical aspect of the engineering design process. This section of writing explores established approaches to designing, developing, and deploying robotic systems based on past research design.
+
+\subsection{Design Methodologies in Medical Robotics}
+The development of medical robots was followed by structured methodologies that unite kinematic modeling, hardware selection, control system development, and safety validation. It is important to research concurrent engineering that integrates design, safety, and usability considerations early in the development process \parencite{Formilan_nodate}.
+
+Typically, medical robots are designed in an iterative process that starts with computer-aided design (CAD), simulation models, and real-world experience for optimization of the robotic performance. \textcite{Dombre2013} suggest that a hierarchical engineering design model for the process is structured development that can be divided into mechanical design, sensor integration, and real-time software implementation.
+
+Topological synthesis is one important part of the engineering process in which the robot's configuration, degrees of freedom (DOF), and structural properties are defined. According to research, design constraints, redundancy considerations, and technological progress of actuators and materials have a large impact on the overall efficiency of medical robots \parencite{Dombre2013}.
+
+\subsection{System Architecture and Functional Components}
+Medical delivery robots are composed of three main layers in its architecture:
+\begin{enumerate}
+    \item \textit{Mechanical structure} - sensors and actuators are included under hardware.
+
+    \item ROS-based middleware for task execution and navigation integrated into the Control System.
+    
+    \item AI-driven path planning algorithms and fleet management systems for optimizing delivery routes and coordinating multiple robots.
+\end{enumerate}
+The control system is important as it provides real-time communication of the hardware components to the ROS-based navigation framework. Modular software development is studied as a way to improve scalability and system adaptability to facilitate the customization of robotic functionalities by hospitals according to the requirements of specific logistics \parencite{Kazanzides2009}.
+
+\subsection{Safety Considerations in Medical Robot Design}
+Safety is an important factor in the autonomous medical robot design process. Medical robots are different from industrial ones since they operate in human-populated environments and hence need to have advanced safety such as collision avoidance, emergency stop mechanisms, and AI-driven risk assessment systems.
+
+\textcite{Jung2014} suggested that Risk Management Strategies such as Failure Modes and Effects Analysis (FMEA), Fault Tree Analysis (FTA), and redundant mechanisms are key to ensuring operational reliability. These methods allow for identifying potential failure points and introducing fail-safe mechanisms.
+
+\textcite{Kazanzides2009} states that surgical and assistive medical robots need increased fail-safe measures since a malfunctioning system could lead to patient or healthcare professional harm. In this regard, it is suggested that real-time monitoring systems be integrated into the architecture based on ROS to detect and mitigate errors in system performance.
+
+\subsection{Optimization of Control Systems and Navigation}
+To design an autonomous robot for medical supply delivery, high-precision navigation systems are needed to guarantee accurate route execution in hospital environments. Today, advancements in SLAM-based localization, sensor fusion, and AI-driven motion planning have brought tremendous enhancement in the efficiency of ROS-based robots \parencite{Rahman_nodate}.
+
+\textcite{Dombre2013} conclude that the application of an AI-based path-planning algorithm facilitates medical delivery robots to navigate dynamically around obstacles to optimize delivery schedules. Additionally, their studies highlight that the deep learning-based reinforcement model allows the robot to learn from prior experience of navigation such that it optimizes its decision-making ability.
+
+To aid in task scheduling and operational efficiency, FMS is integrated within the ROS-based architectures to facilitate multi-robot coordination, task prioritization, and workload distribution in hospital environments \parencite{Rahman_nodate}.
+
+\subsection{Challenges and Future Directions}
+Although a great deal of design engineering methodology sophistication has been achieved, however, there are still several issues:
+
+\begin{enumerate}
+    \item \textit{Hospital Infrastructure Integration} - While it's still a complex problem to ensure an integration with hospital logistics systems.
+
+    \item Expanding robotic fleets poses scalability issues as no congestion needs to be present.
+
+    \item \textit{Human-Robot Interaction (HRI)} - This is still a challenge to design intuitive user interfaces for healthcare staff.
+
+\end{enumerate}
+
+% Section 11
+\section{Ethical and Regulatory Considerations of Autonomous Robots in Healthcare}
+
+\subsection{Ethical Implications}
+Among these challenges inherent in the integration of autonomous robots into healthcare settings, the ethical challenges are about patient dignity and autonomy. According to \textcite{Stahl2016}, ethical frameworks ought to guarantee that technology promotes rather than undermines human values in healthcare.
+
+\subsection{Regulatory Landscape}
+While healthcare robots are still a new challenge for the regulatory landscape, current legislation is not yet fully adapted to it. \textcite{FoschVillaronga_nodate} state that as robots are used more in patient care and surgical procedures, there must be clear guidelines on liability and accountability.
+
+\subsection{Impact on Healthcare Practice}
+According to \textcite{Leenes2017}, autonomous robots are changing how healthcare is practiced, for either routine assistance or complex surgeries. They require strict standards of safety, effectiveness, and ethics to avoid operational errors that may cause patient harm during these transformations.
+
+\subsection{Considerations for Policy Development}
+According to \textcite{Holder2016}, whilst developing policies regarding the use of autonomous robots in healthcare, technological reliability, ethical implications and potential socioeconomic impacts of the use by healthcare personnel should be accounted for. Healthcare policies should focus on improving healthcare outcomes, without replacing the essential components of care with human elements.
+
+\subsection{Future Directions}
+For the future integration of autonomous robots in healthcare, technologists, ethicists, regulators, and the public need to engage. There should be priority given to patient safety, privacy, and the ethical use of technology to make sure that robots do not replace but rather complement human healthcare providers.
+
+% Section 12
+\section{Novelty and Research Gap in Autonomous Robots for Healthcare}
+
+\subsection{Recent Innovations}
+Healthcare has seen some major improvements due to the arrival of autonomous robots. In particular, innovations like increased mobility, higher precision in surgeries, and more advanced interaction with patients through AI have been notable \parencite{FRAGAPANE2021405}. According to \textcite{Stahl2016}, these technologies are so new that the adaptation and improvement of these systems must continue until they fully integrate into different healthcare contexts.
+
+\subsection{Identifying Research Gaps in Autonomous Robots for Healthcare}
+Although technological solutions have provided practical autonomous robots to medical logistics (i.e., TUG, HelpMate), a critical review of the literature has shown that there are still significant limitations that inhibit the use of the solution in dynamic, multi-faceted hospital settings. Namely, existing solutions are often inadequate in providing real-time flexibility, built-in multi-priority scheduling, and multi-layered verification necessities of patient-specific critical processes.
+The present state-of-the-art is dominated by fundamental mobility, but it is shallow in terms of operational and human-centric safety mechanisms.
+These shortcomings are formalized in the following Gap Analysis Matrix (Table~\ref{tab:msds_comparison}) by comparing the limitations of existing systems with the proposed contributions of the MSDS project, which in turn becomes the exact novelty of the given research.
+
+\renewcommand{\arraystretch}{1.3} % vertical padding
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|>{\centering\arraybackslash}m{3.0cm}|
+                >{\centering\arraybackslash}m{3.5cm}|
+                >{\centering\arraybackslash}m{3.0cm}|
+                >{\raggedright\arraybackslash}m{4.0cm}|}
+\hline
+\textbf{Feature / Mechanism} & \textbf{Limitation / Gap in Prior Work} & \textbf{Key Existing Solutions} & \textbf{MSDS Contribution / Novelty} \\
+\hline
+Navigation \& Adaptability (Crowd/Social) &
+Reliance on static, pre-programmed maps, hindering real-time adaptation to dynamic obstacles and rapid layout changes. &
+HelpMate; Early TUG Robots &
+Uses Online SLAM (\texttt{slam\_toolbox}) and ROS~2 Nav2 for dynamic environment mapping and real-time obstacle avoidance. \\
+\hline
+Task Scheduling \& Efficiency (ETAs) &
+Use of simple FIFO scheduling, resulting in inefficient handling of urgent or time-sensitive deliveries. &
+Early Logistics Robots &
+Implements an intelligent task scheduling system that dynamically prioritizes deliveries based on urgency (Hypothesis~2, Question~4). \\
+\hline
+Delivery Verification \& Security &
+Verification relies solely on delivery location or staff handover, increasing the risk of misdelivery of sensitive supplies. &
+Commercial TUG; HOSPI Systems &
+Designs a dual verification framework combining BLE (for coarse proximity) and RFID (for positive, final recipient confirmation). \\
+\hline
+Operability \& Monitoring &
+Lack of a centralized, accessible cloud-based interface for fleet monitoring, remote diagnostics, and operator intervention. &
+Standalone AMRs &
+Integrates a web-first architecture (Next.js/Fastify) enabling real-time fleet management, remote manual control, and task lifecycle auditing. \\
+\hline
+\end{tabular}
+\caption{Gap Analysis Matrix Linking Literature Limitations to MSDS Contributions}
+\label{tab:msds_comparison}
+\end{table}
+\renewcommand{\arraystretch}{1.0} % reset for later tables
+
+\begin{enumerate}
+    \item \textbf{Limited Adaptability to Dynamic Healthcare Environments} 
+    
+    Operating in highly unstructured and dynamic hospital settings is one of the most important challenges for autonomous medical robots.
+    Although Simultaneous Localization and Mapping (SLAM) and AI-driven navigation systems improved robotic mobility, robotic systems still lack adaptability in crowded and unpredictable hospital environments \parencite{Kazanzides2009}.
+    Real-time decisions are difficult for autonomous robots due to human movement, emergency scenarios, and unforeseen obstacles.
+    
+    Furthermore, many robots rely on preprogrammed maps and therefore cannot adapt to a hospital layout that changes.
+    For instance, the early robotic hospital transport systems, like the HelpMate robot, had rigid navigation capabilities, since it relied on static maps \parencite{Rahman_nodate}.
+    The reliance of robots on reinforcement learning techniques that still need to be developed so that the robots continuously learn and adjust to the hospital settings in real-time is a need of future research.
+
+    \item \textbf{Integration Challenges with Existing Healthcare Systems}
+    
+    One major bottleneck to the widespread use of autonomous robots in hospitals is the inability to seamlessly integrate them into Hospital Information Systems (HIS) and Electronic Health Records (EHRs).
+    Some robots have been able to integrate IoT-enabled frameworks for real-time monitoring while others fail due to data interoperability issues \parencite{Thamrongaphichartkul2020}.
+
+    Challenges include:
+    \begin{itemize}
+        \item \textit{Integration problem:} different hospitals use a different format of data and a different protocol on the network.
+        \item \textit{There is a risk:} Autonomous robots transmit patient's sensitive data, and they need to be protected with advanced encryption and security frameworks.
+        \item \textit{Instant Access to Updated Patient Records:} Robots must have instant access to the most recent patient records so that supply can be delivered accurately and without disruption \parencite{Haleem2022}.        
+    \end{itemize}
+
+    \item \textbf{Ethical and Regulatory Challenges in Autonomous Healthcare Robotics}
+    
+    The deployment of autonomous robots in healthcare raises significant ethical concerns, particularly regarding patient privacy, liability in case of errors, and job displacement.
+    Despite advancements in AI-driven diagnostics and robotic caregiving, there remains no universally accepted regulatory framework governing robotic decision-making and medical liability \parencite{Jung2014,Kazanzides2009}.
+    
+    Key ethical concerns include:
+    \begin{itemize}
+        \item Who is responsible when a robot makes an incorrect decision?
+        \item Can robots operate independently in critical care environments without human intervention?
+        \item How do robots ethically handle sensitive patient interactions?
+    \end{itemize}
+    
+    Studies suggest that public perception and healthcare worker acceptance are major barriers to adoption.
+    Many healthcare professionals worry that automation will lead to job losses, despite research showing that robots are designed to support, not replace, human staff \parencite{Dasari2024b}.
+    Future research must explore policy frameworks that balance automation benefits with ethical and employment considerations.
+
+    \item \textbf{Limited Human-Robot Interaction Capabilities}
+    
+    One of the most important challenges in autonomous healthcare robotics is effective HRI. Service robots like Lio and Pepper have been developed to interact with patients, but so far, most autonomous medical robots still lack advanced communication and interaction skills \parencite{holland_service_2021}.
+    
+    Many current robotic systems cannot understand complex verbal and non-verbal cues and hence it is hard to interact with doctors, nurses, and patients in real-time \parencite{Garzon2017}. Furthermore, robots lack emotional intelligence and they are not able to give patients comfort and social engagement in the healthcare setting.
+
+    Future research should focus on:
+    \begin{enumerate}
+        \item Large-scale training data improving natural language processing through AI-driven conversational agents.
+        \item Gesture and facial recognition for non-verbal communication.
+        \item Adaptive interaction models enabling robots to adjust to patient needs.
+    \end{enumerate}
+
+    \item \textbf{Reliability and Maintenance of Autonomous Medical Robots}
+    
+    However, reliability problems persist for medical robots that boost efficiency. One of the studies shows high failure rates in robotic components which results in increased downtime and maintenance costs \parencite{Rahman_nodate}.
+
+    Common reliability issues include:
+    \begin{enumerate}
+        \item Inefficient battery management leading to frequent downtime.
+        \item Mechanical failures from continuous operation in hospital environments.
+        \item Software bugs in AI-driven navigation and task execution causing delivery delays \parencite{Jung2014}.
+    \end{enumerate}
+
+    \item \textbf{Lack of Standardized Safety Regulations for Medical Robots}
+    
+    A second gap in the research is that there is no universally agreed-upon safety standard for autonomous medical robots.
+    Medical robots operate in unstructured environments compared to industrial robots which follow strict safety regulations (e.g., ISO 10218-1, ANSI/RIA R15.06), so they require advanced safety mechanisms \parencite{Kazanzides2009}.
+
+    \item \textbf{Future Directions in Medical Robotics Research}
+    \begin{itemize}
+        \item Development of adaptive learning algorithms enabling autonomous adaptation to hospital environments.
+        \item Enhancement of AI-driven diagnostics for improved patient monitoring and medical decision-making.
+        \item Improvement of multi-robot coordination for seamless task sharing across hospital departments.
+        \item Innovation of robust cybersecurity frameworks protecting sensitive patient data.
+        \item Creation of low-cost robotic solutions addressing affordability and accessibility in diverse healthcare settings.
+    \end{itemize}
+\end{enumerate}
+
+
+% Section 13
+\section[Conclusion and Future Directions for Autonomous Robots in Healthcare]
+{Conclusion and Future Directions for\\ Autonomous Robots in Healthcare}
+
+\subsection{Summary of Key Findings}
+The critical literature review conducted above identifies the importance of the advances in healthcare robotics. Although technologies bring much accuracy and effectiveness in terms of patient management and organizational activities, the specified gaps prove that the next generation of solutions, such as MSDS, is required to cover all the aspects of real-time flexibility and priority-based logistics in unpredictable hospital environments. \textcite{Stahl2016} and \textcite{Holder2016} mention that while these technologies offer many benefits, they also have difficulties, like ethical difficulties, difficulties of integration, and precise regulatory frameworks.
+
+\subsection{Implications for Future Research}
+Future research should seek to increase the adaptability of Healthcare Robots to complex human environments \parencite{Stahl2016}. Additional studies are needed to integrate them into the clinical setting given the need to preserve patient safety and privacy.
+
+\subsection{Advancements in Robot Capabilities}
+Indeed, the further progression of AI and machine learning can greatly contribute to the future development of healthcare robots to perform more complex tasks of greater self-governance \parencite{FoschVillaronga_nodate}. To make their continued patient benefit, these technological improvements have to keep high standards in safety and ethics.
+
+\subsection{Regulatory and Ethical Frameworks}
+As the healthcare sector continues to see the increasing pace of robotics technology, robust ethical and regulatory frameworks are crucial. These frameworks should support innovation, while at the same time supporting safe, ethical, and beneficial to patients, deployments of AI. Since they have to be continuously updated to accommodate new challenges as they arise, this is a seemingly endless task.
+
+Overall, this literature review lays the groundwork for the design and development of the Medical Supply Delivery System (MSDS), a ROS-based autonomous robot aimed at solving logistics challenges in dynamic hospital environments. The insights from prior work and gaps identified in this work provide an opportunity for the MSDS to contribute meaningful answers through robust technical design, human-centered interaction strategies and careful empirical evaluation.
+

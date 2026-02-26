@@ -1,0 +1,169 @@
+One of the applications of autonomous mobile systems is hospital delivery. Materials like medication, lab samples, laundry, and meals are moved around daily in the hospital. While solutions have been developed to aid hospital logistics, they are not exactly the most flexible and do not take into account environmental complexity like narrow corridors, older buildings, overcrowding, and more. Due to these complexities, some materials are still delivered manually by the workers.
+
+This chapter introduces the project topic and explains the motivation and importance of the problem being addressed.
+
+
+\section{Background}
+Over time, robotics has transformed healthcare by addressing issues like accuracy, productivity, time management, inefficient distribution of materials, risk of infection, etc. Hospitals, in particular, face constant challenges like staff shortages, increasing workloads and the need for timely delivery of medical supplies. Studies have shown that hospital staff can spend up to 4-16\% of their working hours walking or transporting items around \parencite{yen_nurses_2018}. This time could otherwise be devoted to patient care and clinical duties. Delays in medication delivery and exposure to infectious areas also contribute to health risks especially during outbreaks.
+
+Robots in healthcare generally fall into two categories - those assisting individuals, such as sufferers of the disease, and those helping in the overall systems such as pharmacies and hospitals \parencite{noauthor_robot_2024}. Examples include companion robots, which engage emotionally with patients, laboratory robots found in labs to automate processes or assist lab technicians in completing routine tasks, and robotic prosthetics which provide their wearers with life-like limb functionality \parencite{noauthor_medical_2024}. 
+
+Medical Delivery robots, such as TUG by Aethon and RelayRx by Relay Robotics are designed to transport items such as medications, meals, and equipment within healthcare facilities, relieving staff from repetitive tasks. However, most of the existing solutions usually depend on the pre-programmed layout of the environment and might struggle to adapt to dynamic environments with unpredictable changes. 
+
+This study aims to address the limitations of these current systems by integrating real-time decision-making capabilities and flexible navigation, making them more suitable for dynamic hospital environments.
+
+\section{Problem Statement}
+With the rise of technology in the healthcare sector, a lot of issues became imperative to address.  Key Issues include:
+\begin{enumerate}
+    \item Workload on Health Care Workers: The healthcare sector is generally a constantly changing environment with the working conditions becoming increasingly demanding and stressful. This high-stress work environment results in high turnover rates, low job satisfaction, and absenteeism due to sickness, ultimately affecting patient care and worker well-being \parencite{holland_service_2021, portoghese_burnout_2014}. Persistent understaffing actively contributes to burnout, emergency room overcrowding, medication errors, missed patient care, and patient dissatisfaction. Studies show that for every 5\% increase in understaffed shifts, there is a 1\% increase in the mortality rate. In comparison, a 5\% increase in registered nurses' hours reduces the mortality rate by 2\% \parencite{rochefort_associations_2020}. The need for healthcare workers to focus on higher-priority tasks arose. 
+    \item Error-Prone Delivery Schedules: Traditional delivery systems were heavily reliant on human staff and therefore prone to inefficiencies like delays or human error. In understaffed hospitals, these systems become more susceptible to errors, risking patients \parencite{johansson_incident_2019, pape_innovative_2005}. 
+    \item 24/7 Availability: Unlike human workers, robots can continuously operate without exhaustion. The study found that long working hours are mostly responsible for about one-third of the estimated work-related burden of disease. The study concludes that working 55 or more hours per week correlates with an estimated 35\% higher risk of a stroke and a 17\% higher risk of heart disease, compared to working 35-40 hours a week. 
+    \item Reduction of Human Interaction: During the COVID-19 pandemic, there were several cases of worker infection as a result of exposure to infected patients. By May 2020, 152,888 healthcare workers had been reported to have been infected with COVID-19, with 130 countries reporting at least one case of this \parencite{bandyopadhyay_infection_2020}.
+    Figure~\ref{fig:infections} shows the statistics of infections and deaths of healthcare workers during the COVID-19 pandemic.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figures/image32.png}
+        \caption{Total number of reported infections and deaths in WHO regions Source:~\parencite{bandyopadhyay_infection_2020} }
+        \label{fig:infections}
+    \end{figure}
+\end{enumerate}
+
+These issues underlined the need to minimize human interactions unless necessary during severe infection cases.
+
+While existing systems attempted to solve some of these issues, they struggled with task scheduling and adaptability in dynamic environments. These issues called for a more reliable and efficient system. This study aims to develop a reliable autonomous delivery robot that could navigate unpredictable hospital environments, ensuring accuracy, and reducing the risk of infection, exposure, and strain on healthcare workers.
+
+
+\section{Aims and Objectives}
+This project aims to design and develop an autonomous robot using ROS for delivering medical supplies in dynamic hospital environments, focusing on real-time navigation, obstacle avoidance, and efficient task scheduling.
+
+The objectives of this research include:
+\begin{enumerate}
+    \item To conduct a comprehensive literature review on autonomous robots in healthcare, focusing on navigation, task scheduling, and obstacle avoidance by analyzing existing research and technologies used in hospital environments.
+    \item To design and develop an autonomous medical delivery robot by utilizing ROS and incorporating key components such as navigation, task scheduling, and human-robot interaction specific to hospital settings.
+    \item To implement real-time navigation and localization by using SLAM algorithms, enabling the robot to map and navigate dynamic indoor environments with changing obstacles.
+    \item To integrate obstacle detection and avoidance systems by employing sensor fusion techniques such as LiDAR, depth cameras, and ultrasonic sensors to enhance the robot's ability to navigate in crowded hospital corridors.
+    \item To develop an intelligent task scheduling system by implementing optimization algorithms that prioritize delivery tasks based on urgency and traffic conditions within the hospital.
+    \item To incorporate human-robot interaction features by designing a user interface, including voice command, and web or mobile application control, that allows medical staff to request and monitor deliveries in real-time.
+    \item To test and validate the system's performance by conducting experiments in a simulated hospital environment to evaluate the robot's navigation accuracy, obstacle avoidance, task efficiency, and overall reliability.
+\end{enumerate}
+
+\section{Research Questions}
+The basic challenges encountered in modern healthcare environments brought up these fundamental questions that served as a driver for this research project. Three questions, crucial to our investigation, of healthcare facility operations aim to optimize them while minimizing patient care and staff well-being.
+
+\begin{enumerate}
+  \item \textbf{How can an autonomous robot system be designed to operate in dynamic environments while performing tasks?}
+
+  This question goes from technical to practical to understand how to develop a robust autonomous system to navigate hospital environments that are not predictable. 
+  The answer to this will be determined by looking at several navigation algorithms, particularly those that enable the robot to react as quickly as possible to the introduction of new obstacles or a change in its path. 
+  Solutions (like SLAM) will be tested to see how accurately and fast the robot can build and adjust a map of its surroundings. However, to achieve this goal, it must be ensured that the robot not only moves efficiently but also does not disrupt anyone in the hospital for safety reasons.
+
+  \item \textbf{To what extent can the robot be able to localize and navigate in the dynamic hospital environments through real-time mapping, how accurately and efficiently?}
+
+  This question assesses the performance of the robot in navigation using metrics like path accuracy (< than 10 cm drift over 10 m), obstacle response (less than 2 s), task completion rate (more than 95 percent). 
+  This is to establish whether localization through the use of SLAM can be used to stabilize the operation even under changing indoor conditions.
+
+  \item \textbf{How can you develop various task scheduling and prioritization methods to satisfy urgent and demand medical supply delivery in the weight of time?}
+
+  The need for medical supply deliveries in hospitals is big and it spans from urgent to not urgent items to be delivered. 
+  To answer this question, it is necessary to understand task scheduling and prioritization algorithms that can accommodate the hospital's needs and supply things at the right places at the right time. 
+  It will study optimization algorithms where the robot can decide based on factors such as urgency, location, and even macro, like the prediction of congestion of that hospital. The goal is to create a system that equips the robot to do so effectively, improves hospital efficiency, and relieves healthcare workers from their logistical burden.
+
+  \item \textbf{Will a priority based scheduling system decrease the time of urgent tasks by at least 30 percent, relative to a simple FIFO system?}
+
+  The effect of smart scheduling on the efficiency of delivery is measured in this question. 
+  The metrics are urgent-task tardiness, on-time delivery percentage, and penalties of non-urgent delay, which prove that prioritization has a significant impact on time-sensitive supply deliveries.
+
+  \item \textbf{How does the implementation of an autonomous delivery system affect worker satisfaction, patient care quality, and overall hospital operational efficiency?}
+
+  This question addresses how autonomous systems will be implemented in healthcare settings from the human and operational perspectives. 
+  The objective is to determine how automation reduces non-clinical tasks, which in turn affects healthcare workers' ability to concentrate on patient care, job satisfaction, and the quality of healthcare delivery. Measures that will be used to evaluate it comprise average time which staff saves on a single delivery cycle (target is 25\% and above), consistency of the completion of the task, and the rate of decreased manual intervention (2 or less interventions per hour).
+\end{enumerate}
+
+
+\section{Significance of the Study}
+The development of an autonomous robot for delivering medical supplies 
+in hospitals has a broader significance in healthcare, robotics, and society.
+
+The delivery of supplies is often managed by healthcare workers who also have to juggle this with their primary responsibilities and tasks. Studies show that nurses spend approximately 30\% of their time on logistics and delivery tasks rather than direct patient care. 
+This contributes to understaffed hospitals, an increased workload for healthcare workers, and a reduction in the quality of patient care. 
+By automating these processes, the quality of patient care, inherently the hospital efficiency increases. 
+Additionally, the safety of healthcare workers will improve, as their workload is reduced and their exposure to infected patients is minimized.
+
+Beyond the healthcare sector, this project can be fine-tuned to suit other workspaces such as warehouses, airports, etc. 
+This research project will advance the field of robotics by laying a foundation to address challenges related to autonomous navigation in unpredictable environments with frequent movement of people.
+
+For society, this project encourages public trust in hospitals, as patients get prioritized care. 
+It builds up patients' satisfaction and can contribute to the hospital's reputation for quality care.
+
+
+\section{Scope and Delimitations of Study}
+\subsection{Scope}
+\begin{itemize}
+  \item \textit{Navigation and Path Planning in real-time}: Navigation algorithms like SLAM enable robots to run in the dynamic hospital setting with unexpected obstacles.
+  \item \textit{Task Scheduling and Prioritization}: Creating a system for scheduling tasks that prioritize deliveries by urgency and location to minimize traffic and patient flow while maximizing the delivery efficiency of supplies.
+  \item \textit{Obstacle Detection and Avoidance}: Interfacing different sensors (LiDAR, cameras, ultrasonic) to make it aware of the obstacles in the environment in real-time and enable safe navigation through crowded corridors.
+  \item \textit{Human-Robot Interaction (HRI)}: Designing an interface to allow healthcare staff to ask for and monitor deliveries through voice commands or mobile apps.
+  \item \textit{Tracking and confirmations}: A means of having patients and other recipients identified to track and confirm deliveries.
+\end{itemize}
+
+\subsection{Delimitations}
+While the project seeks to improve hospital logistics, there are still some limitations:
+\begin{enumerate}
+  \item \textit{Resource Constraints}: \\
+  Due to budget restrictions, the prototype may lack high-end sensors (e.g. 3D LIDAR) and high-end hardware, which negates the robot’s accurate navigation and response time in complex environments.
+  \item \textit{Indoor Navigation Only}: \\
+  The robot is only meant to be used indoors and will not be able to run in outdoor hospital spaces like parking lots or gardens.
+  \item \textit{Fixed Medical Supply Handling}: \\
+  The medical supplies will be carried by the robot itself, but the robot will not include an automated dispensing mechanism.
+  \item \textit{Limited Interaction Capabilities}: \\
+  The robot will not interact with humans in an advanced human-robot interaction beyond basic voice notifications. Conversational AI or patient engagement features are not available, other than predefined messages.
+  \item \textit{Restricted Real World Testing}: \\
+  Instead of testing the robot in live hospital settings, the robot's initial testing will be in controlled environments. It restricts the capacity to provide a complete simulation of dynamic hospital conditions, for instance, high human traffic or frequent layout changes.
+  \item \textit{Privacy and Ethical Concerns}: \\
+  The privacy concerns of implementing patient recognition features may limit the robot’s ability to interact directly with patients unless other data security measures are implemented.
+  \item \textit{Power and Autonomy Constraints}: \\
+  Continuous operation can be limited by battery life, requiring the robot to periodically recharge. This reduces efficiency, especially during peak demand periods.
+\end{enumerate}
+
+This project aims at the development of a foundational prototype that can be further expanded and optimized with further resources and real hospital testing.
+
+\section{Hypothesis and Validation Approach}
+In this study, the research is guided by a series of hypotheses which connects the operational performance of the robot with quantifiable results in terms of accuracy in navigation, efficiency in schedule and safety to humans. 
+Every hypothesis will be tested by means of controlled experiments and quantitative performance measures that are in Chapter 3.
+
+\begin{enumerate}
+  \item \textit{Hypothesis 1:} \\
+  Combining real-time obstacle detection and adaptive path planning will enhance the success rate of the navigation by at least 30 percent in comparison to static route planning. \\
+  \textit{Validation Method:} Compare time to complete task, the count of collisions, and path diversion in both the case of a static and dynamic obstacle based on measures like the success rate (percentage), and path efficiency (percentage increase).
+
+  \item \textit{Hypothesis 2:} \\
+  The use of priority-conscious task scheduling will cut the time of urgent deliveries by at least 25\% and the overall throughput of the system. \\
+  \textit{Validation Approach:} Measure delivery times, waiting time of tasks, and compliance with wait times on the basis of priority levels using the FIFO (baseline) and the priority-based scheduling algorithm.
+
+  \item \textit{Hypothesis 3:} \\
+  The IMU/encoder fusion using Extended Kalman Filters will decrease localization drift by at least 40 percent as compared to localization using odometry alone. \\
+  \textit{Validation Approach:} The validation method will measure the positional error through the mean square error between the approximated and ground-truth poses in duplicated navigation experiments.
+
+  \item \textit{Hypothesis 4:} \\
+  The safety measures included in the robot, including emergency stops and proximity detection, will guarantee no collisions and a minimum distance of 0.3 m between humans and the robot, in human-robot interaction tests. \\
+  \textit{Validation Approach:} Experimentally conduct proximity-based experiments in controlled hospital-like settings and measure stop latency and minimum distance measures.
+\end{enumerate}
+
+The hypotheses will then be tested using a set of Key Performance Indicators (KPIs) such as the success rate, delay time, distance error, and safety margins, which will serve to either validate or falsify the assumptions in the realistic operating conditions.
+
+
+
+\section{Definition of Terms}
+\begin{enumerate}
+  \item \textit{Autonomous Robot:} A system or machine capable of operating without direct human intervention.
+  \item \textit{Logistics:} The management of how resources are acquired, stored, and transported to their final destination.
+  \item \textit{Dynamic Environment:} A constantly changing environment where conditions are unpredictable like objects and people constantly moving.
+  \item \textit{Robot Operating System (ROS):} An open-source framework that provides software tools and libraries for robotic applications such as facilitating communication between different components of a robot system.
+  \item \textit{Simultaneous Localization and Mapping (SLAM):} A technique that allows robots to determine their position within a given environment while building a map of it.
+  \item \textit{Obstacle Avoidance:} The ability to detect obstacles and navigate around them.
+  \item \textit{Motion or Path Planning:} The process of finding the best or optimal route to transfer an object from one point to another.
+  \item \textit{Navigation:} The process of monitoring and controlling movement from one place to another.
+  \item \textit{Real-Time Processing:} A method of analyzing data as it is received.
+  \item \textit{Microcontroller:} A small integrated circuit used to control specific components in electronic systems.
+  \item \textit{Single Board Computer (SBC):} A small and complete computer built on one single circuit board.
+\end{enumerate}

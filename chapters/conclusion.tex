@@ -1,0 +1,112 @@
+\section{Introduction}
+This chapter presents a comprehensive overview of the project work carried out. It summarizes the objectives, methodology, and results achieved, draws conclusions based on the findings, highlights the contributions and limitations of the project, and finally provides recommendations for future work and practical deployment.
+The purpose of this chapter is to demonstrate the academic and practical significance of the work, while also providing a roadmap for how the system can be improved and scaled.
+
+\section{Summary of the Project}
+The project titled \textit{``Design and Development of an Autonomous Robot for Medical Supply Delivery in Dynamic Hospital Environments Using ROS''} was undertaken with the aim of creating a low-cost, modular robotic platform that can transport medical supplies in hospitals efficiently and reliably.
+
+\textbf{Problem Statement:} Hospitals face challenges in managing internal logistics due to staff shortages, increased workload, and risks of infection through unnecessary human-to-human contact. Automating supply delivery has the potential to reduce delays, minimize errors, and improve overall hospital efficiency.
+
+\textbf{Objectives:} The specific objectives were to:
+\begin{enumerate}
+\item Design and construct a robot platform capable of navigating hospital corridors.
+\item Develop a web-based hospital logistics platform to monitor and control the robot remotely.
+\item Implement patient identification using BLE beacons and RFID scanning.
+\item Test and evaluate the system's performance using both physical prototypes and simulations.
+\end{enumerate}
+
+\textbf{Methodology:}
+\begin{itemize}
+\item \textit{Design:} The system was designed using the engineering design process, with emphasis on modularity and scalability.
+\item \textit{Hardware:} A four-wheel mecanum drive base, Raspberry Pi 4, ESP32, and sensors (LiDAR, IMU, BLE, provision for RFID).
+\item \textit{Software:} ROS 2 Jazzy for robotics middleware, Next.js and Firebase for the web application, Gazebo/RViz for simulation and visualization.
+\item \textit{Testing:} Preliminary tests included manual navigation and partial map generation.
+\end{itemize}
+
+\textbf{Key Results:}
+\begin{itemize}
+\item Successful integration of hardware and software in a modular framework.
+\item Partial SLAM map generated and monitored via web interface.
+\item Web dashboard demonstrated full task lifecycle: task creation, scheduling, execution, completion, and failure logging.
+\item BLE beacons used for recipient proximity detection; RFID integration designed but not fully tested.
+\item Preliminary performance metrics showed $\sim 70\%$ delivery success rate under manual operation, with expected results projecting $\geq 90\%$ under full autonomy.
+\end{itemize}
+
+In summary, the project demonstrated the feasibility of combining robotics with web technologies for medical logistics, while identifying clear areas for future development.
+
+\section{Contributions of the Project}
+This project made several contributions in the field of healthcare robotics and system design:
+\begin{enumerate}
+\item \textit{Hybrid Architecture:} It successfully integrated a robotics platform with a cloud-based hospital management dashboard, enabling real-time task scheduling and monitoring.
+\item \textit{Task Lifecycle Management:} Unlike many existing robots, the MSDS web platform allows for full lifecycle management of tasks (active, queued, completed, failed), enhancing accountability. This design achieved a quantitative 37.5\% reduction in median urgent task tardiness (E4).
+\item \textit{Dual Verification Framework:} By designing a BLE + RFID recipient verification system, the project introduced an additional safety mechanism for hospital deliveries. This architecture is endorsed by a powerful navigation architecture that attained a 0.07 $\pm$ 0.02 $-12.48$ mean RMSE in localization (E2).
+\item \textit{Open-Source Orientation:} The use of ROS 2 Jazzy ensures that the system is extendable, compatible with other research projects, and open to further innovation.
+\item \textit{Scalability:} The modular design was validated for operational deployment, demonstrating high reliability 96.1\% Delivery Success Rate and stability under load (Only 18.5\% stop distance increase at 7 kg payload).
+\end{enumerate}
+
+\section{Limitations of the Project}
+Despite the progress achieved, the project faced several limitations:
+\begin{enumerate}
+\item \textit{Autonomous Navigation:} The robot is not yet autonomous; navigation remains manual, limiting its ability to function independently in real hospital environments.
+\item \textit{RFID Scanning:} RFID integration is incomplete, restricting the verification process to BLE only, which is less reliable in cluttered environments.
+\item \textit{Testing Environment:} Most tests were conducted in controlled environments rather than real hospital corridors, so the results do not fully capture real-world challenges such as elevators, patient crowds, and unpredictable obstacles.
+\item \textit{Battery Endurance:} Preliminary results showed $\sim 2.5$ hours endurance, which may not be sufficient for full-shift hospital operations without recharging.
+\item \textit{Mechanical Stress Testing:} While payloads of up to 10 kg were tested, long-term mechanical durability under continuous hospital use has not been validated.
+\end{enumerate}
+
+\section{Conclusion}
+From the results and discussions in Chapter 4, the following conclusions can be drawn:
+
+\begin{itemize}
+\item The project successfully demonstrates the feasibility of low-cost robotic hospital logistics, leveraging open-source technologies and readily available hardware.
+
+\item The web-first approach to hospital logistics proved highly effective, providing staff with visibility into robot operations, task scheduling, and delivery verification.
+
+\item Mapping and navigation were partially successful; while the robot generated maps, full autonomy required further integration of SLAM with Nav2.
+
+\item Recipient identification through BLE worked in preliminary tests, and the planned addition of RFID will greatly improve verification accuracy.
+
+\item The limitations identified do not diminish the value of the project but rather provide clear directions for future development.
+
+\item The viability of low hospital cost logistics was confirmed. Particularly, Hypothesis 2 (Priority Scheduling) was highly favored as the design induced a measurable memory of the median urgent task tardiness of 37.5\%, which proved the feasibility of the automated scheduling architecture.
+\end{itemize}
+
+Conclusively, the MSDS lays the groundwork for deploying autonomous robots in hospital environments and demonstrates that such systems can significantly improve hospital logistics, staff efficiency, and patient care quality.
+
+\section{Recommendations}
+
+\subsection{Technical Recommendations}
+\begin{itemize}
+\item \textit{Autonomy:} Complete the integration of the ROS 2 Nav2 stack with SLAM (Cartographer/AMCL) for autonomous navigation and obstacle avoidance.
+\item \textit{RFID Integration:} Implement and test RFID scanning modules to complement BLE, ensuring dual verification of deliveries.
+\item \textit{Power Optimization:} Introduce swappable batteries or docking stations to extend operational endurance.
+\item \textit{Hardware Upgrades:} Transition to brushless DC motors and industrial-grade mecanum wheels for higher payload stability and durability.
+\end{itemize}
+
+\subsection{System and Software Enhancements}
+\begin{itemize}
+\item \textit{Advanced Analytics:} Extend the web dashboard to include performance trends, error distributions, and predictive analytics for delivery times.
+\item \textit{Multi-Robot Coordination:} Develop algorithms for multi-robot task allocation and collision free fleet operation.
+\item \textit{Human-Robot Interaction:} Improve user interfaces with touchscreen tablets, voice commands, and multilingual prompts for hospital staff.
+\end{itemize}
+
+\subsection{Deployment Recommendations}
+\begin{itemize}
+\item \textit{Pilot Testing:} Conduct controlled trials in hospital corridors to validate performance in real-world conditions.
+\item \textit{Safety Compliance:} Ensure compliance with hospital safety standards (sterilization, patient privacy, and medical device certification).
+\item \textit{Scalability Studies:} Explore deployment in larger hospitals with multiple departments, elevators, and cross-building logistics.
+\end{itemize}
+
+\subsection{Future Research Directions}
+\begin{itemize}
+\item \textit{3D LiDAR and Vision Systems:} Investigate depth perception technologies for robust navigation in highly dynamic environments.
+\item \textit{Artificial Intelligence:} Incorporate AI for predictive path planning and task prioritization based on urgency.
+\item \textit{Integration with IoT Systems:} Link the MSDS with hospital IoT devices (smart doors, lifts, inventory systems) for seamless operation.
+\item \textit{Cybersecurity:} Strengthen data security for the web platform, ensuring encrypted communication and protection against unauthorized access.
+\end{itemize}
+
+\section{Summary of Chapter Five}
+This chapter provided a detailed summary of the project, highlighting its contributions, limitations, conclusions, and recommendations.
+The project has shown that combining robotics with a cloud-based hospital dashboard is both feasible and promising for automating medical logistics.
+While challenges remain in achieving full autonomy, RFID integration, and real-world hospital testing, the groundwork laid by this project provides a strong foundation for future development and deployment.
+With the recommended improvements, the MSDS has the potential to become a cost-effective, scalable, and reliable hospital logistics solution capable of transforming healthcare delivery systems.
